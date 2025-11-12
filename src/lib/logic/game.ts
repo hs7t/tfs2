@@ -1,3 +1,5 @@
+import type { NewsEvent } from './news'
+
 type Currency = number
 type Tubip = number
 type Matter = number
@@ -23,6 +25,7 @@ class Game {
             tubip: 0 as Tubip,
             matter: 10 as Matter,
         },
-        economy: structuredClone(this.economy), // to be updated constantly and only by effectss
+        economy: structuredClone(this.economy), // to be updated constantly and only by effects
+        newsEvents: [] as Array<NewsEvent>,
     }
 }
