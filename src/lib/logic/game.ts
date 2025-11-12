@@ -3,13 +3,6 @@ type Tubip = number
 type Matter = number
 
 class Game {
-    currentState = {
-        wealth: {
-            currency: 0 as Currency,
-            tubip: 0 as Tubip,
-            matter: 10 as Number,
-        },
-    }
     economy = {
         rates: {
             tubip: {
@@ -23,5 +16,13 @@ class Game {
                 tubip: 1 / 5,
             } as Record<keyof any, Matter>,
         },
+    }
+    currentState = {
+        wealth: {
+            currency: 0 as Currency,
+            tubip: 0 as Tubip,
+            matter: 10 as Matter,
+        },
+        economy: structuredClone(this.economy), // to be updated constantly and only by effectss
     }
 }
