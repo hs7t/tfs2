@@ -18,7 +18,6 @@ class Game {
             } as Record<keyof any, Tubip>,
             currency: {
                 tubip: 1 / 2,
-                matter: 0.5,
             } as Record<keyof any, Currency>,
             matter: {
                 tubip: 1 / 5,
