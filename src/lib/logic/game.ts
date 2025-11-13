@@ -1,4 +1,4 @@
-import type { NewsEvent } from './news'
+import type { EventLog, NewsEvent } from './events'
 import type { Ticks } from './time'
 
 type Currency = number
@@ -29,6 +29,7 @@ type ScheduleEffect = {
 class Game {
     economy = {
         rates: {
+            // in x, how many y?
             tubip: {
                 matter: 5,
                 currency: 2,
@@ -40,6 +41,17 @@ class Game {
                 tubip: 1 / 5,
             } as Record<keyof any, Matter>,
         },
+        production: {
+            perTick: {
+                tubip: 0 as Tubip,
+                matter: 10 as Matter,
+            },
+            perFabrication: {
+                tubip: 1 as Tubip,
+                matter: 0 as Matter,
+            },
+        },
+        disorder: 0.5, // randomness of prices and whatnot
     }
     currentState = {
         wealth: {
@@ -49,6 +61,7 @@ class Game {
         },
         economy: structuredClone(this.economy), // to be updated constantly and only by effects
         newsEvents: [] as Array<NewsEvent>,
+        logs: [] as Array<EventLog>,
     }
     effects = {
         modifiers: {} as Record<string, ModifierEffect>,
