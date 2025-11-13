@@ -28,6 +28,7 @@ type ScheduleEffect = {
 }
 
 class Game {
+    /* Data */
     economy = {
         rates: {
             // in x, how many y?
@@ -70,6 +71,7 @@ class Game {
         schedules: {} as Record<string, ScheduleEffect>,
     }
 
+    /* Time */
     private tickInterval?: ReturnType<typeof setInterval>
     private tickFrequency = 3000 as Milliseconds
 
@@ -99,10 +101,17 @@ class Game {
             }
         })
     }
-
     stop = () => {
         this.ticking.end()
         saveGame(this)
+    }
+
+    actions = () => {
+        generate: {
+            tubip: (amount: Tubip) => {
+                this.currentState.wealth.tubip -= 1
+            }
+        }
     }
 }
 
