@@ -81,15 +81,6 @@ class Game {
                     new TickEvent(this.currentState.ticksElapsed),
                 )
             }, this.tickFrequency)
-
-            gameEvents.addEventListener('tick', (e) => {
-                let eventDetails = e as TickEvent
-
-                if (eventDetails.tickstamp % 3 == 0) {
-                    // every three ticks
-                    saveGame(this) // save game
-                }
-            })
         },
         end: () => {
             clearInterval(this.tickInterval)
@@ -98,9 +89,20 @@ class Game {
 
     start = () => {
         this.ticking.start()
+
+        gameEvents.addEventListener('tick', (e) => {
+            let eventDetails = e as TickEvent
+
+            if (eventDetails.tickstamp % 3 == 0) {
+                // every three ticks
+                saveGame(this) // save game
+            }
+        })
     }
+
     stop = () => {
         this.ticking.end()
+        saveGame(this)
     }
 }
 
