@@ -92,6 +92,8 @@ class Game {
     }
 }
 
+export type GameType = InstanceType<typeof Game>
+
 class GameEvents extends EventTarget {}
 
 export class TickEvent extends Event {
