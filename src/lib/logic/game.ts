@@ -62,6 +62,7 @@ class Game {
         economy: structuredClone(this.economy), // to be updated constantly and only by effects
         newsEvents: [] as Array<NewsEvent>,
         logs: [] as Array<EventLog>,
+        ticksElapsed: 0 as Ticks, // +1 on every tick
     }
     effects = {
         modifiers: {} as Record<string, ModifierEffect>,
