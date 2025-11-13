@@ -1,5 +1,5 @@
 import type { HappeningLog, NewsHappening } from './happenings'
-import type { Ticks, Tickstamp } from './time'
+import type { Milliseconds, Ticks, Tickstamp } from './time'
 
 type Currency = number
 type Tubip = number
@@ -67,6 +67,28 @@ class Game {
     effects = {
         modifiers: {} as Record<string, ModifierEffect>,
         schedules: {} as Record<string, ScheduleEffect>,
+    }
+
+    private tickInterval?: ReturnType<typeof setInterval>
+    private tickFrequency = 3000 as Milliseconds
+
+    ticking = {
+        start: () => {
+            this.tickInterval = setInterval(() => {
+                this.currentState.ticksElapsed += 1
+                gameEvents.dispatchEvent(new TickEvent(undefined))
+            }, this.tickFrequency)
+        },
+        end: () => {
+            clearInterval(this.tickInterval)
+        },
+    }
+
+    start = () => {
+        this.ticking.start()
+    }
+    stop = () => {
+        this.ticking.end()
     }
 }
 
