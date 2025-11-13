@@ -27,6 +27,24 @@ type ScheduleEffect = {
     lingering: undefined | Ticks // ticks this is lingering for
 }
 
+class GameEffectEvent extends Event {
+    static readonly eventName = 'gameEffectEvent'
+
+    readonly eventId: string
+
+    constructor(eventId: string) {
+        super(GameEffectEvent.eventName, { bubbles: true, composed: true })
+        this.eventId = eventId
+    }
+}
+
+class GameEffect {
+    readonly eventId: string = 'undefined'
+    readonly dispatchEffectEvent: () => void = () => {
+        gameEvents.dispatchEvent(new GameEffectEvent(this.eventId))
+    }
+}
+
 class Game {
     economy = {
         rates: {
@@ -105,6 +123,18 @@ class Game {
     stop = () => {
         this.ticking.end()
         saveGame(this)
+    }
+
+    effects = {
+        ProductionIncrease: class extends GameEffect {
+            eventId = 'productionIncrease'
+            amount: number
+
+            constructor(amount: number) {
+                super()
+                this.amount = amount
+            }
+        },
     }
 }
 
