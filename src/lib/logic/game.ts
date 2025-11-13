@@ -1,4 +1,5 @@
 import type { HappeningLog, NewsHappening } from './happenings'
+import { saveGame } from './storage'
 import type { Milliseconds, Ticks, Tickstamp } from './time'
 
 type Currency = number
@@ -80,6 +81,15 @@ class Game {
                     new TickEvent(this.currentState.ticksElapsed),
                 )
             }, this.tickFrequency)
+
+            gameEvents.addEventListener('tick', (e) => {
+                let eventDetails = e as TickEvent
+
+                if (eventDetails.tickstamp % 3 == 0) {
+                    // every three ticks
+                    saveGame(this) // save game
+                }
+            })
         },
         end: () => {
             clearInterval(this.tickInterval)
