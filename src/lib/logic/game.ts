@@ -45,6 +45,11 @@ class GameEffect {
     }
 }
 
+type EventListenersItem = {
+    type: string
+    function: (e: Event) => void
+}
+
 class Game {
     economy = {
         rates: {
@@ -107,21 +112,35 @@ class Game {
         },
     }
 
+    private eventListeners: Array<EventListenersItem> = []
+
     start = () => {
         this.ticking.start()
 
-        gameEvents.addEventListener('tick', (e) => {
-            let eventDetails = e as TickEvent
+        this.eventListeners.push({
+            type: 'tick',
+            function: (e) => {
+                let eventDetails = e as TickEvent
 
-            if (eventDetails.tickstamp % 3 == 0) {
-                // every three ticks
-                saveGame(this) // save game
-            }
+                if (eventDetails.tickstamp % 3 == 0) {
+                    // every three ticks
+                    saveGame(this) // save game
+                }
+            },
         })
+
+        for (let item of this.eventListeners) {
+            gameEvents.addEventListener(item.type, item.function)
+        }
     }
 
     stop = () => {
         this.ticking.end()
+
+        for (let item of this.eventListeners) {
+            gameEvents.removeEventListener(item.type, item.function)
+        }
+
         saveGame(this)
     }
 
