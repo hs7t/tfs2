@@ -60,14 +60,16 @@ class Game {
             tubip: 0 as Tubip,
             matter: 10 as Matter,
         },
+
         economy: structuredClone(this.economy), // to be updated constantly and only by effects
+        effects: {
+            modifiers: {} as Record<string, ModifierEffect>,
+            schedules: {} as Record<string, ScheduleEffect>,
+        },
+
         newsHappenings: [] as Array<NewsHappening>,
         happeningLogs: [] as Array<HappeningLog>,
         ticksElapsed: 0 as Ticks, // +1 on every tick
-    }
-    effects = {
-        modifiers: {} as Record<string, ModifierEffect>,
-        schedules: {} as Record<string, ScheduleEffect>,
     }
 
     private tickInterval?: ReturnType<typeof setInterval>
