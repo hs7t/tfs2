@@ -1,5 +1,5 @@
 import type { HappeningLog, NewsHappening } from './happenings'
-import type { Ticks } from './time'
+import type { Ticks, Tickstamp } from './time'
 
 type Currency = number
 type Tubip = number
@@ -71,5 +71,16 @@ class Game {
 }
 
 class GameEvents extends EventTarget {}
+
+export class TickEvent extends Event {
+    static readonly eventName = 'tick'
+
+    readonly tickstamp: Tickstamp | undefined
+
+    constructor(tickstamp: Tickstamp | undefined) {
+        super(TickEvent.eventName, { bubbles: true, composed: true })
+        this.tickstamp = tickstamp
+    }
+}
 
 export const gameEvents = new GameEvents()
