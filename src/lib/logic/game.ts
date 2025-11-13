@@ -129,4 +129,4 @@ export class TickEvent extends Event {
 }
 
 export const gameEvents = new GameEvents()
-export const game = getGame()
+export let game = getGame()
