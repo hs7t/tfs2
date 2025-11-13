@@ -1,5 +1,5 @@
 import type { HappeningLog, NewsHappening } from './happenings'
-import { saveGame } from './storage'
+import { fetchGame, saveGame } from './storage'
 import type { Milliseconds, Ticks, Tickstamp } from './time'
 
 type Currency = number
@@ -106,6 +106,13 @@ class Game {
     }
 }
 
+const getGame = () => {
+    const saved = fetchGame()
+
+    if (saved == undefined) return new Game()
+    else return saved
+}
+
 export type GameType = InstanceType<typeof Game>
 
 class GameEvents extends EventTarget {}
@@ -122,3 +129,4 @@ export class TickEvent extends Event {
 }
 
 export const gameEvents = new GameEvents()
+export const game = getGame()
