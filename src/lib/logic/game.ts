@@ -1,8 +1,30 @@
 import type { NewsEvent } from './news'
+import type { Ticks } from './time'
 
 type Currency = number
 type Tubip = number
 type Matter = number
+
+type ModifierEffect = {
+    /* 
+    Modifiers alter certain numbers, like 
+    production qts., exchange rates, or entropy
+    forever or for an amount of ticks. 
+    */
+
+    action: () => void // runner for a modification or a series of them
+    lingering: undefined | Ticks // ticks this is lingering for
+}
+
+type ScheduleEffect = {
+    /* 
+    Actions in schedules are run every n ticks
+    */
+
+    action: () => void // an action
+    cadence: Ticks // how often to run
+    lingering: undefined | Ticks // ticks this is lingering for
+}
 
 class Game {
     economy = {
@@ -27,5 +49,9 @@ class Game {
         },
         economy: structuredClone(this.economy), // to be updated constantly and only by effects
         newsEvents: [] as Array<NewsEvent>,
+    }
+    effects = {
+        modifiers: {} as Record<string, ModifierEffect>,
+        schedules: {} as Record<string, ScheduleEffect>,
     }
 }
