@@ -76,7 +76,9 @@ class Game {
         start: () => {
             this.tickInterval = setInterval(() => {
                 this.currentState.ticksElapsed += 1
-                gameEvents.dispatchEvent(new TickEvent(undefined))
+                gameEvents.dispatchEvent(
+                    new TickEvent(this.currentState.ticksElapsed),
+                )
             }, this.tickFrequency)
         },
         end: () => {
@@ -99,9 +101,9 @@ class GameEvents extends EventTarget {}
 export class TickEvent extends Event {
     static readonly eventName = 'tick'
 
-    readonly tickstamp: Tickstamp | undefined
+    readonly tickstamp: Tickstamp
 
-    constructor(tickstamp: Tickstamp | undefined) {
+    constructor(tickstamp: Tickstamp) {
         super(TickEvent.eventName, { bubbles: true, composed: true })
         this.tickstamp = tickstamp
     }
