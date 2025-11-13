@@ -69,3 +69,7 @@ class Game {
         schedules: {} as Record<string, ScheduleEffect>,
     }
 }
+
+class GameEvents extends EventTarget {}
+
+export const gameEvents = new GameEvents()
