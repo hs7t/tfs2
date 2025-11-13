@@ -30,18 +30,18 @@ type ScheduleEffect = {
 class GameEffectEvent extends Event {
     static readonly eventName = 'gameEffectEvent'
 
-    readonly eventId: string
+    readonly effectId: string
 
-    constructor(eventId: string) {
+    constructor(effectId: string) {
         super(GameEffectEvent.eventName, { bubbles: true, composed: true })
-        this.eventId = eventId
+        this.effectId = effectId
     }
 }
 
 class GameEffect {
-    readonly eventId: string = 'undefined'
+    readonly effectId: string = 'undefined'
     readonly dispatchEffectEvent: () => void = () => {
-        gameEvents.dispatchEvent(new GameEffectEvent(this.eventId))
+        gameEvents.dispatchEvent(new GameEffectEvent(this.effectId))
     }
 }
 
@@ -127,7 +127,7 @@ class Game {
 
     effects = {
         ProductionIncrease: class extends GameEffect {
-            eventId = 'productionIncrease'
+            effectId = 'productionIncrease'
             amount: number
 
             constructor(amount: number) {
