@@ -1,4 +1,4 @@
-import type { EventLog, NewsEvent } from './events'
+import type { HappeningLog, NewsHappening } from './happenings'
 import type { Ticks } from './time'
 
 type Currency = number
@@ -60,8 +60,8 @@ class Game {
             matter: 10 as Matter,
         },
         economy: structuredClone(this.economy), // to be updated constantly and only by effects
-        newsEvents: [] as Array<NewsEvent>,
-        logs: [] as Array<EventLog>,
+        newsHappenings: [] as Array<NewsHappening>,
+        happeningLogs: [] as Array<HappeningLog>,
         ticksElapsed: 0 as Ticks, // +1 on every tick
     }
     effects = {
