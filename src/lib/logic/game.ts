@@ -1,5 +1,6 @@
-import type { EventLog, NewsEvent } from './events'
-import type { Ticks } from './time'
+import type { HappeningLog, NewsHappening } from './happenings'
+import { fetchGame, saveGame } from './storage'
+import type { Milliseconds, Ticks, Tickstamp } from './time'
 
 type Currency = number
 type Tubip = number
@@ -60,12 +61,72 @@ class Game {
             matter: 10 as Matter,
         },
         economy: structuredClone(this.economy), // to be updated constantly and only by effects
-        newsEvents: [] as Array<NewsEvent>,
-        logs: [] as Array<EventLog>,
+        newsHappenings: [] as Array<NewsHappening>,
+        happeningLogs: [] as Array<HappeningLog>,
         ticksElapsed: 0 as Ticks, // +1 on every tick
     }
     effects = {
         modifiers: {} as Record<string, ModifierEffect>,
         schedules: {} as Record<string, ScheduleEffect>,
     }
+
+    private tickInterval?: ReturnType<typeof setInterval>
+    private tickFrequency = 3000 as Milliseconds
+
+    ticking = {
+        start: () => {
+            this.tickInterval = setInterval(() => {
+                this.currentState.ticksElapsed += 1
+                gameEvents.dispatchEvent(
+                    new TickEvent(this.currentState.ticksElapsed),
+                )
+            }, this.tickFrequency)
+        },
+        end: () => {
+            clearInterval(this.tickInterval)
+        },
+    }
+
+    start = () => {
+        this.ticking.start()
+
+        gameEvents.addEventListener('tick', (e) => {
+            let eventDetails = e as TickEvent
+
+            if (eventDetails.tickstamp % 3 == 0) {
+                // every three ticks
+                saveGame(this) // save game
+            }
+        })
+    }
+
+    stop = () => {
+        this.ticking.end()
+        saveGame(this)
+    }
 }
+
+const getGame = () => {
+    const saved = fetchGame()
+
+    if (saved == undefined) return new Game()
+    else return saved
+}
+
+export type GameType = InstanceType<typeof Game>
+
+class GameEvents extends EventTarget {}
+
+export class TickEvent extends Event {
+    static readonly eventName = 'tick'
+
+    readonly tickstamp: Tickstamp
+
+    constructor(tickstamp: Tickstamp) {
+        super(TickEvent.eventName, { bubbles: true, composed: true })
+        this.tickstamp = tickstamp
+    }
+}
+
+export const gameEvents = new GameEvents()
+export let game = getGame()
