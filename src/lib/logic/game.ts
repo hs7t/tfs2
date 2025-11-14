@@ -11,9 +11,17 @@ type GameAction = {
     actionOptions: object | undefined
 }
 
-type GameActionId = 'tubipProductionIncrease'
+type GameActionId = 'tubipProductionIncrease' | 'matterDerivationDecrease'
 
 type TubipProductionIncreaseGameAction = GameAction & {
+    actionId: 'tubipProductionIncrease'
+    actionOptions: {
+        amount: number
+    }
+}
+
+type AmbientMatterDerivationDecrease = GameAction & {
+    actionId: 'matterDerivationDecrease'
     actionOptions: {
         amount: number
     }
@@ -136,6 +144,10 @@ class Game {
             {
                 type: 'tick',
                 function: () => {
+                    /*
+                        Runs this.currentState.effects on every tick
+                    */
+
                     const runEffects = (effects: Array<Effect>) => {
                         for (let effect of effects) {
                             this.runAction(effect.action)
