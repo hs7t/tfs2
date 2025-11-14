@@ -6,53 +6,39 @@ type Currency = number
 type Tubip = number
 type Matter = number
 
-type ModifierEffect = {
+type GameAction = {
+    actionId: GameActionId
+    actionOptions: object | undefined
+}
+
+type GameActionId = 'tubipProductionIncrease'
+
+type TubipProductionIncreaseGameAction = GameAction & {
+    actionOptions: {
+        amount: number
+    }
+}
+
+type Effect = {
+    action: GameAction
+    lingering?: undefined | Ticks // ticks this is lingering for
+    cadence?: undefined | Ticks
+}
+
+type ModifierEffect = Effect & {
     /* 
     Modifiers alter certain numbers, like 
     production qts., exchange rates, or entropy
     forever or for an amount of ticks. 
     */
-
-    action: () => void // runner for a modification or a series of them
-    lingering: undefined | Ticks // ticks this is lingering for
 }
 
-type ScheduleEffect = {
+type ScheduleEffect = Effect & {
     /* 
     Actions in schedules are run every n ticks
     */
 
-    action: () => void // an action
     cadence: Ticks // how often to run
-    lingering: undefined | Ticks // ticks this is lingering for
-}
-
-class GameActionEvent extends Event {
-    static readonly eventName = 'gameActionEvent'
-
-    readonly effectId: string
-
-    constructor(effectId: string) {
-        super(GameActionEvent.eventName, { bubbles: true, composed: true })
-        this.effectId = effectId
-    }
-}
-
-class GameAction {
-    readonly effectId: string = 'undefined'
-    readonly dispatchEffectEvent: () => void = () => {
-        gameEvents.dispatchEvent(new GameActionEvent(this.effectId))
-    }
-}
-
-class TubipProductionIncreaseGameAction extends GameAction {
-    effectId = 'tubipProductionIncrease'
-    amount: number
-
-    constructor(amount: number) {
-        super()
-        this.amount = amount
-    }
 }
 
 type EventListenersItem = {
@@ -96,8 +82,8 @@ class Game {
 
         economy: structuredClone(this.economy), // to be updated constantly and only by effects
         effects: {
-            modifiers: {} as Record<string, ModifierEffect>,
-            schedules: {} as Record<string, ScheduleEffect>,
+            modifiers: {} as Array<ModifierEffect>,
+            schedules: {} as Array<ScheduleEffect>,
         },
 
         newsHappenings: [] as Array<NewsHappening>,
@@ -108,7 +94,7 @@ class Game {
     private tickInterval?: ReturnType<typeof setInterval>
     private tickFrequency = 3000 as Milliseconds
 
-    ticking = {
+    private ticking = {
         start: () => {
             this.tickInterval = setInterval(() => {
                 this.currentState.ticksElapsed += 1
@@ -120,6 +106,14 @@ class Game {
         end: () => {
             clearInterval(this.tickInterval)
         },
+    }
+
+    private runAction = (action: GameAction) => {
+        if (action.actionId == 'tubipProductionIncrease') {
+            const actionInfo = action as TubipProductionIncreaseGameAction
+            this.currentState.economy.production.perTick.tubip +=
+                actionInfo.actionOptions.amount
+        }
     }
 
     private eventListeners: Array<EventListenersItem> = []
@@ -140,14 +134,43 @@ class Game {
                 },
             },
             {
-                type: 'gameActionEvent',
-                function: (e: GameActionEvent) => {
-                    if (e.effectId == 'tubipProductionIncrease') {
-                        const eventInfo =
-                            e as unknown as TubipProductionIncreaseGameAction
-                        this.currentState.economy.production.perTick.tubip +=
-                            eventInfo.amount
+                type: 'tick',
+                function: () => {
+                    const runEffects = (effects: Array<Effect>) => {
+                        for (let effect of effects) {
+                            this.runAction(effect.action)
+                        }
                     }
+
+                    const getApplicableEffects = (effects: Array<Effect>) => {
+                        let result = []
+                        for (let effect of effects) {
+                            if (!(effect?.lingering == 0)) {
+                                break
+                            }
+                            if (
+                                effect.cadence &&
+                                effect.cadence %
+                                    this.currentState.ticksElapsed !=
+                                    0
+                            ) {
+                                break
+                            }
+
+                            result.push(effect)
+                        }
+                    }
+
+                    const applicableEffects = Array.prototype.concat(
+                        getApplicableEffects(
+                            this.currentState.effects.modifiers,
+                        ),
+                        getApplicableEffects(
+                            this.currentState.effects.schedules,
+                        ),
+                    )
+
+                    runEffects(applicableEffects)
                 },
             },
         )
