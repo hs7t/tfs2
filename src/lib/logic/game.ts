@@ -98,6 +98,18 @@ class Game {
         effects: {
             modifiers: {} as Array<ModifierGameEffect>,
             schedules: {} as Array<ScheduleGameEffect>,
+            register: (effect: GameEffect) => {
+                switch (effect.kind) {
+                    case 'modifier':
+                        this.currentState.effects.modifiers.push(
+                            effect as ModifierGameEffect,
+                        )
+                    case 'schedule':
+                        this.currentState.effects.schedules.push(
+                            effect as ScheduleGameEffect,
+                        )
+                }
+            },
         },
 
         newsUpdates: [] as Array<NewsUpdate>,
@@ -198,7 +210,8 @@ class Game {
                 function: (e: NewsUpdateEvent) => {
                     this.currentState.newsUpdates.push(e.newsUpdate)
 
-                    for (let action of e.newsUpdate.actions) {
+                    for (const effect of e.newsUpdate.effects) {
+                        this.currentState.effects.register(effect)
                     }
                 },
             },
