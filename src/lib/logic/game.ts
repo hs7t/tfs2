@@ -1,4 +1,4 @@
-import type { HappeningLog, NewsHappening } from './happenings'
+import type { HappeningLog, NewsUpdate } from './happenings'
 import { fetchGame, saveGame } from './storage'
 import type { Milliseconds, Ticks, Tickstamp } from './time'
 
@@ -6,7 +6,10 @@ type Currency = number
 type Tubip = number
 type Matter = number
 
-type GameAction = {
+class GameEvents extends EventTarget {}
+export const gameEvents = new GameEvents()
+
+export type GameAction = {
     actionId: GameActionId
     actionOptions: object | undefined
 }
@@ -94,7 +97,7 @@ class Game {
             schedules: {} as Array<ScheduleEffect>,
         },
 
-        newsHappenings: [] as Array<NewsHappening>,
+        newsUpdates: [] as Array<NewsUpdate>,
         happeningLogs: [] as Array<HappeningLog>,
         ticksElapsed: 0 as Ticks, // +1 on every tick
     }
@@ -212,8 +215,6 @@ const getGame = () => {
 
 export type GameType = InstanceType<typeof Game>
 
-class GameEvents extends EventTarget {}
-
 export class TickEvent extends Event {
     static readonly eventName = 'tick'
 
@@ -225,5 +226,4 @@ export class TickEvent extends Event {
     }
 }
 
-export const gameEvents = new GameEvents()
 export let game = getGame()
