@@ -1,4 +1,4 @@
-import type { HappeningLog, NewsUpdate } from './happenings'
+import type { HappeningLog, NewsUpdate, NewsUpdateEvent } from './happenings'
 import { fetchGame, saveGame } from './storage'
 import type { Milliseconds, Ticks, Tickstamp } from './time'
 
@@ -30,25 +30,28 @@ type AmbientMatterDerivationDecrease = GameAction & {
     }
 }
 
-type Effect = {
+export type GameEffect = {
     action: GameAction
     lingering?: undefined | Ticks // ticks this is lingering for
     cadence?: undefined | Ticks
+    kind: 'modifier' | 'schedule'
 }
 
-type ModifierEffect = Effect & {
+type ModifierGameEffect = GameEffect & {
     /* 
     Modifiers alter certain numbers, like 
     production qts., exchange rates, or entropy
     forever or for an amount of ticks. 
     */
+    kind: 'modifier'
 }
 
-type ScheduleEffect = Effect & {
+type ScheduleGameEffect = GameEffect & {
     /* 
     Actions in schedules are run every n ticks
     */
 
+    kind: 'schedule'
     cadence: Ticks // how often to run
 }
 
@@ -93,8 +96,8 @@ class Game {
 
         economy: structuredClone(this.economy), // to be updated constantly and only by effects
         effects: {
-            modifiers: {} as Array<ModifierEffect>,
-            schedules: {} as Array<ScheduleEffect>,
+            modifiers: {} as Array<ModifierGameEffect>,
+            schedules: {} as Array<ScheduleGameEffect>,
         },
 
         newsUpdates: [] as Array<NewsUpdate>,
@@ -151,13 +154,15 @@ class Game {
                         Runs this.currentState.effects on every tick
                     */
 
-                    const runEffects = (effects: Array<Effect>) => {
+                    const runGameEffects = (effects: Array<GameEffect>) => {
                         for (let effect of effects) {
                             this.runAction(effect.action)
                         }
                     }
 
-                    const getApplicableEffects = (effects: Array<Effect>) => {
+                    const getApplicableGameEffects = (
+                        effects: Array<GameEffect>,
+                    ) => {
                         let result = []
                         for (let effect of effects) {
                             if (!(effect?.lingering == 0)) {
@@ -176,16 +181,25 @@ class Game {
                         }
                     }
 
-                    const applicableEffects = Array.prototype.concat(
-                        getApplicableEffects(
+                    const applicableGameEffects = Array.prototype.concat(
+                        getApplicableGameEffects(
                             this.currentState.effects.modifiers,
                         ),
-                        getApplicableEffects(
+                        getApplicableGameEffects(
                             this.currentState.effects.schedules,
                         ),
                     )
 
-                    runEffects(applicableEffects)
+                    runGameEffects(applicableGameEffects)
+                },
+            },
+            {
+                type: 'newsUpdate',
+                function: (e: NewsUpdateEvent) => {
+                    this.currentState.newsUpdates.push(e.newsUpdate)
+
+                    for (let action of e.newsUpdate.actions) {
+                    }
                 },
             },
         )
