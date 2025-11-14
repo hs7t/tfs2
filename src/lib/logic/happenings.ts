@@ -1,9 +1,9 @@
-import type { GameAction } from './game'
+import type { GameEffect } from './game'
 import type { Tickstamp } from './time'
 
 export type NewsUpdate = {
     headline: string
-    effects: Array<GameAction>
+    effects: Array<GameEffect>
     tickstamp: Tickstamp | undefined
 }
 
