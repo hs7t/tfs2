@@ -27,26 +27,26 @@ type ScheduleEffect = {
     lingering: undefined | Ticks // ticks this is lingering for
 }
 
-class GameEffectEvent extends Event {
-    static readonly eventName = 'gameEffectEvent'
+class GameActionEvent extends Event {
+    static readonly eventName = 'gameActionEvent'
 
     readonly effectId: string
 
     constructor(effectId: string) {
-        super(GameEffectEvent.eventName, { bubbles: true, composed: true })
+        super(GameActionEvent.eventName, { bubbles: true, composed: true })
         this.effectId = effectId
     }
 }
 
-class GameEffect {
+class GameAction {
     readonly effectId: string = 'undefined'
     readonly dispatchEffectEvent: () => void = () => {
-        gameEvents.dispatchEvent(new GameEffectEvent(this.effectId))
+        gameEvents.dispatchEvent(new GameActionEvent(this.effectId))
     }
 }
 
-class ProductionIncreaseGameEffect extends GameEffect {
-    effectId = 'productionIncrease'
+class TubipProductionIncreaseGameAction extends GameAction {
+    effectId = 'tubipProductionIncrease'
     amount: number
 
     constructor(amount: number) {
@@ -140,11 +140,11 @@ class Game {
                 },
             },
             {
-                type: 'gameEffectEvent',
-                function: (e: GameEffectEvent) => {
-                    if (e.effectId == 'productionIncrease') {
+                type: 'gameActionEvent',
+                function: (e: GameActionEvent) => {
+                    if (e.effectId == 'tubipProductionIncrease') {
                         const eventInfo =
-                            e as unknown as ProductionIncreaseGameEffect
+                            e as unknown as TubipProductionIncreaseGameAction
                         this.currentState.economy.production.perTick.tubip +=
                             eventInfo.amount
                     }
