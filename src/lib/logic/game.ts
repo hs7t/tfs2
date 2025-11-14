@@ -45,9 +45,19 @@ class GameEffect {
     }
 }
 
+class ProductionIncreaseGameEffect extends GameEffect {
+    effectId = 'productionIncrease'
+    amount: number
+
+    constructor(amount: number) {
+        super()
+        this.amount = amount
+    }
+}
+
 type EventListenersItem = {
     type: string
-    function: (e: Event) => void
+    function: (e: Event | any) => void
 }
 
 class Game {
@@ -117,17 +127,30 @@ class Game {
     start = () => {
         this.ticking.start()
 
-        this.eventListeners.push({
-            type: 'tick',
-            function: (e) => {
-                let eventDetails = e as TickEvent
+        this.eventListeners.push(
+            {
+                type: 'tick',
+                function: (e) => {
+                    let eventDetails = e as TickEvent
 
-                if (eventDetails.tickstamp % 3 == 0) {
-                    // every three ticks
-                    saveGame(this) // save game
-                }
+                    if (eventDetails.tickstamp % 3 == 0) {
+                        // every three ticks
+                        saveGame(this) // save game
+                    }
+                },
             },
-        })
+            {
+                type: 'gameEffectEvent',
+                function: (e: GameEffectEvent) => {
+                    if (e.effectId == 'productionIncrease') {
+                        const eventInfo =
+                            e as unknown as ProductionIncreaseGameEffect
+                        this.currentState.economy.production.perTick.tubip +=
+                            eventInfo.amount
+                    }
+                },
+            },
+        )
 
         for (let item of this.eventListeners) {
             gameEvents.addEventListener(item.type, item.function)
@@ -142,18 +165,6 @@ class Game {
         }
 
         saveGame(this)
-    }
-
-    effects = {
-        ProductionIncrease: class extends GameEffect {
-            effectId = 'productionIncrease'
-            amount: number
-
-            constructor(amount: number) {
-                super()
-                this.amount = amount
-            }
-        },
     }
 }
 
