@@ -46,3 +46,22 @@ export const GENERIC_CONSUMABLE_NEWS_UPDATES = [
         ],
     } as ConsumableNewsUpdate,
 ] as Array<ConsumableNewsUpdate>
+
+export class NewsManager {
+    private availableNews: Array<ConsumableNewsUpdate> = [
+        ...GENERIC_CONSUMABLE_NEWS_UPDATES,
+    ]
+
+    consumeRandom = () => {
+        let currentIndex = Math.floor(Math.random() * this.availableNews.length)
+        let currentEntry = this.availableNews[currentIndex]
+
+        if (currentEntry.repeatable == true) {
+            if (currentEntry.repetitionsLeft == undefined) {
+                return currentEntry
+            } else if (currentEntry.repetitionsLeft > 0) {
+                return currentEntry
+            }
+        }
+    }
+}
