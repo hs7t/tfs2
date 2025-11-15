@@ -16,14 +16,14 @@ export type GameAction = {
 
 type GameActionId = 'tubipProductionIncrease' | 'matterDerivationDecrease'
 
-type TubipProductionIncreaseGameAction = GameAction & {
+export type TubipProductionChangeGameAction = GameAction & {
     actionId: 'tubipProductionIncrease'
     actionOptions: {
         amount: number
     }
 }
 
-type AmbientMatterDerivationDecrease = GameAction & {
+export type MatterDerivationChangeGameAction = GameAction & {
     actionId: 'matterDerivationDecrease'
     actionOptions: {
         amount: number
@@ -136,7 +136,7 @@ class Game {
 
     private runAction = (action: GameAction) => {
         if (action.actionId == 'tubipProductionIncrease') {
-            const actionInfo = action as TubipProductionIncreaseGameAction
+            const actionInfo = action as TubipProductionChangeGameAction
             this.currentState.economy.production.perTick.tubip +=
                 actionInfo.actionOptions.amount
         }
