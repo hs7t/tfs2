@@ -111,7 +111,7 @@ class GameEffects {
     getApplicable = () => {
         let result = []
         for (let effect of this.getAll()) {
-            if (!(effect?.lingering == 0)) {
+            if (effect?.lingering == 0) {
                 continue
             }
             if (
