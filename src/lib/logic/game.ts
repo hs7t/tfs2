@@ -60,33 +60,74 @@ type EventListenersItem = {
     function: (e: Event | any) => void
 }
 
-class Game {
-    economy = {
-        rates: {
-            // in x, how many y?
-            tubip: {
-                matter: 5,
-                currency: 2,
-            } as Record<keyof any, Tubip>,
-            currency: {
-                tubip: 1 / 2,
-            } as Record<keyof any, Currency>,
-            matter: {
-                tubip: 1 / 5,
-            } as Record<keyof any, Matter>,
-        },
-        production: {
-            perTick: {
-                tubip: 0 as Tubip,
-                matter: 10 as Matter,
-            },
-            perFabrication: {
-                tubip: 1 as Tubip,
-                matter: 0 as Matter,
-            },
-        },
-        disorder: 0.5, // randomness of prices and whatnot
+class GameEconomy {
+    rates = {
+        // in x, how many y?
+        tubip: {
+            matter: 5,
+            currency: 2,
+        } as Record<keyof any, Tubip>,
+        currency: {
+            tubip: 1 / 2,
+        } as Record<keyof any, Currency>,
+        matter: {
+            tubip: 1 / 5,
+        } as Record<keyof any, Matter>,
     }
+    production = {
+        perTick: {
+            tubip: 0 as Tubip,
+            matter: 10 as Matter,
+        },
+        perFabrication: {
+            tubip: 1 as Tubip,
+            matter: 0 as Matter,
+        },
+    }
+    controls = {
+        deviationFactor: 0.5, // randomness of prices and whatnot
+    }
+}
+
+class GameEffects {
+    private modifiers = [] as Array<ModifierGameEffect>
+    private schedules = [] as Array<ScheduleGameEffect>
+
+    register = (effect: GameEffect) => {
+        switch (effect.kind) {
+            case 'modifier':
+                this.modifiers.push(effect as ModifierGameEffect)
+                break
+            case 'schedule':
+                this.schedules.push(effect as ScheduleGameEffect)
+                break
+        }
+    }
+
+    getAll = () => {
+        return [...this.modifiers, ...this.schedules]
+    }
+
+    getApplicable = () => {
+        let result = []
+        for (let effect of this.getAll()) {
+            if (!(effect?.lingering == 0)) {
+                continue
+            }
+            if (
+                effect.cadence &&
+                effect.cadence % game.currentState.ticksElapsed != 0
+            ) {
+                continue
+            }
+
+            result.push(effect)
+        }
+        return result
+    }
+}
+
+class Game {
     currentState = {
         wealth: {
             currency: 0 as Currency,
@@ -94,23 +135,8 @@ class Game {
             matter: 10 as Matter,
         },
 
-        economy: structuredClone(this.economy), // to be updated constantly and only by effects
-        effects: {
-            modifiers: {} as Array<ModifierGameEffect>,
-            schedules: {} as Array<ScheduleGameEffect>,
-            register: (effect: GameEffect) => {
-                switch (effect.kind) {
-                    case 'modifier':
-                        this.currentState.effects.modifiers.push(
-                            effect as ModifierGameEffect,
-                        )
-                    case 'schedule':
-                        this.currentState.effects.schedules.push(
-                            effect as ScheduleGameEffect,
-                        )
-                }
-            },
-        },
+        economy: new GameEconomy(), // to be updated constantly and only by effects
+        effects: new GameEffects(),
 
         newsUpdates: [] as Array<NewsUpdate>,
         happeningLogs: [] as Array<HappeningLog>,
@@ -172,37 +198,7 @@ class Game {
                         }
                     }
 
-                    const getApplicableGameEffects = (
-                        effects: Array<GameEffect>,
-                    ) => {
-                        let result = []
-                        for (let effect of effects) {
-                            if (!(effect?.lingering == 0)) {
-                                break
-                            }
-                            if (
-                                effect.cadence &&
-                                effect.cadence %
-                                    this.currentState.ticksElapsed !=
-                                    0
-                            ) {
-                                break
-                            }
-
-                            result.push(effect)
-                        }
-                    }
-
-                    const applicableGameEffects = Array.prototype.concat(
-                        getApplicableGameEffects(
-                            this.currentState.effects.modifiers,
-                        ),
-                        getApplicableGameEffects(
-                            this.currentState.effects.schedules,
-                        ),
-                    )
-
-                    runGameEffects(applicableGameEffects)
+                    runGameEffects(this.currentState.effects.getApplicable())
                 },
             },
             {
