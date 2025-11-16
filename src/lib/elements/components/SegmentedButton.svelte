@@ -24,5 +24,7 @@
         padding: 0.6ch;
         font-family: var(--t-font-family-primary);
         font-size: var(--t-font-size-primary);
+
+        flex-grow: 1;
     }
 </style>
