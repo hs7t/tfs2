@@ -1,4 +1,8 @@
-import type { HappeningLog, NewsUpdate, NewsUpdateEvent } from './happenings'
+import {
+    NewsManager,
+    type HappeningLog,
+    type NewsUpdateEvent,
+} from './happenings'
 import { fetchGame, saveGame } from './storage'
 import type { Milliseconds, Ticks, Tickstamp } from './time'
 
@@ -138,7 +142,7 @@ class Game {
         economy: new GameEconomy(), // to be updated constantly and only by effects
         effects: new GameEffects(),
 
-        newsUpdates: [] as Array<NewsUpdate>,
+        news: new NewsManager(),
         happeningLogs: [] as Array<HappeningLog>,
         ticksElapsed: 0 as Ticks, // +1 on every tick
     }
@@ -204,8 +208,6 @@ class Game {
             {
                 type: 'newsUpdate',
                 function: (e: NewsUpdateEvent) => {
-                    this.currentState.newsUpdates.push(e.newsUpdate)
-
                     for (const effect of e.newsUpdate.effects) {
                         this.currentState.effects.register(effect)
                     }

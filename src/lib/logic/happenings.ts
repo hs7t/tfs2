@@ -1,4 +1,8 @@
-import type { GameEffect, TubipProductionChangeGameAction } from './game'
+import {
+    gameEvents,
+    type GameEffect,
+    type TubipProductionChangeGameAction,
+} from './game'
 import type { Tickstamp } from './time'
 
 export type NewsUpdate = {
@@ -52,6 +56,8 @@ export class NewsManager {
         ...GENERIC_CONSUMABLE_NEWS_UPDATES,
     ]
 
+    readonly updates: Array<NewsUpdate> = []
+
     consumeRandom = () => {
         let currentIndex = Math.floor(Math.random() * this.availableNews.length)
         let currentEntry = this.availableNews[currentIndex]
@@ -63,5 +69,10 @@ export class NewsManager {
                 return currentEntry
             }
         }
+    }
+
+    recordUpdate = (update: NewsUpdate) => {
+        this.updates.push(update)
+        gameEvents.dispatchEvent(new NewsUpdateEvent(update))
     }
 }
