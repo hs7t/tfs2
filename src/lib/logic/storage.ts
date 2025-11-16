@@ -1,4 +1,4 @@
-import type { GameType } from './game'
+import { Game, type GameType } from './game'
 
 const fetchObjectFromLocalStorage = (id: string) => {
     const fetchedJSON = localStorage.getItem(id)
@@ -20,5 +20,11 @@ export const saveGame = (game: GameType) => {
 }
 
 export const fetchGame = () => {
-    return fetchObjectFromLocalStorage('game')
+    let newGame = new Game()
+    let oldGame = fetchObjectFromLocalStorage('game') as Game
+
+    return {
+        ...newGame,
+        currentState: oldGame.currentState,
+    } as Game
 }

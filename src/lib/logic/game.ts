@@ -132,7 +132,7 @@ class GameEffects {
     }
 }
 
-class Game {
+export class Game {
     currentState = {
         wealth: {
             currency: 0 as Currency,
@@ -183,6 +183,8 @@ class Game {
 
     start = () => {
         this.ticking.start()
+
+        this.runEffects(this.currentState.effects.getApplicable())
 
         this.eventListeners.push(
             {
