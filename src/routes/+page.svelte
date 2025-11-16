@@ -16,10 +16,35 @@
 <main>
     {#if loadingState == true}
         <p>Loading!</p>
-    {:else} 
-        <InfoBar>
-            <p>Tubip Fabrication Simulator</p>
-        </InfoBar>
-        <Status />
+    {:else}
+        <section class="information">
+            <InfoBar>
+                <p>Tubip Fabrication Simulator</p>
+            </InfoBar>
+            <Status />
+        </section>
+        <section>
+            <InfoBar>
+                <p><a href=".">About</a></p>
+                <p><a href=".">How to play</a></p>
+            </InfoBar>
+        </section>
     {/if}
 </main>
+
+<style>
+    main {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    section {
+        max-height: 100dvw;
+        max-width: 100dvh;
+
+        flex-grow: 1;
+        flex-basis: 50%;
+        aspect-ratio: 1 / 1;
+    }
+</style>
