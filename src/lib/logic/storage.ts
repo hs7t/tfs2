@@ -16,15 +16,13 @@ const saveObjectToLocalStorage = (obj: object, id: string) => {
 
 export const saveGame = (game: GameType) => {
     saveObjectToLocalStorage(game, 'game')
-    localStorage.setItem('game', JSON.stringify(game))
 }
 
 export const fetchGame = () => {
-    let newGame = new Game()
+    let game = new Game()
     let oldGame = fetchObjectFromLocalStorage('game') as Game
 
-    return {
-        ...newGame,
-        currentState: oldGame.currentState,
-    } as Game
+    game.currentState = oldGame.currentState
+
+    return game
 }
