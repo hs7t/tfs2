@@ -17,12 +17,23 @@ const saveObjectToLocalStorage = (obj: object, id: string) => {
 export const saveGame = (game: GameType) => {
     saveObjectToLocalStorage(game, 'game')
 }
-
 export const fetchGame = () => {
-    let game = new Game()
-    let oldGame = fetchObjectFromLocalStorage('game') as Game
+    const oldGame = fetchObjectFromLocalStorage('game') as Game
+    const game = new Game()
 
-    game.currentState = oldGame.currentState
+    game.currentState.wealth = oldGame.currentState.wealth
+    game.currentState.ticksElapsed = oldGame.currentState.ticksElapsed
+
+    for (const effect of oldGame.currentState.effects.modifiers) {
+        game.currentState.effects.register(effect)
+    }
+    for (const effect of oldGame.currentState.effects.schedules) {
+        game.currentState.effects.register(effect)
+    }
+
+    game.currentState.news.updates = oldGame.currentState.news.updates
+    game.currentState.news.availableNews =
+        oldGame.currentState.news.availableNews
 
     return game
 }

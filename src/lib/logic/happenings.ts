@@ -52,11 +52,11 @@ export const GENERIC_CONSUMABLE_NEWS_UPDATES = [
 ] as Array<ConsumableNewsUpdate>
 
 export class NewsManager {
-    private availableNews: Array<ConsumableNewsUpdate> = [
+    availableNews: Array<ConsumableNewsUpdate> = [
         ...GENERIC_CONSUMABLE_NEWS_UPDATES,
     ]
 
-    readonly updates: Array<NewsUpdate> = []
+    updates: Array<NewsUpdate> = []
 
     consumeRandom = (): ConsumableNewsUpdate => {
         let currentIndex = Math.floor(Math.random() * this.availableNews.length)

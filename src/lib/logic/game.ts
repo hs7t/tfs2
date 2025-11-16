@@ -95,8 +95,8 @@ class GameEconomy {
 }
 
 class GameEffects {
-    private modifiers = [] as Array<ModifierGameEffect>
-    private schedules = [] as Array<ScheduleGameEffect>
+    modifiers = [] as Array<ModifierGameEffect>
+    schedules = [] as Array<ScheduleGameEffect>
 
     register = (effect: GameEffect) => {
         switch (effect.kind) {
@@ -183,8 +183,6 @@ export class Game {
 
     start = () => {
         this.ticking.start()
-
-        this.runEffects(this.currentState.effects.getApplicable())
 
         this.eventListeners.push(
             {
