@@ -1,5 +1,8 @@
 import {
     gameEvents,
+    type GameAction,
+    type GameActionTarget,
+    type GameActionType,
     type GameEffect,
     type TubipProductionChangeGameAction,
 } from './game'
@@ -12,7 +15,9 @@ export type NewsUpdate = {
 }
 
 export type HappeningLog = {
-    message: string
+    actionTarget: GameActionTarget
+    actionType: GameActionType | undefined
+    factor?: number
     tickstamp: Tickstamp
 }
 
@@ -40,7 +45,8 @@ export const GENERIC_CONSUMABLE_NEWS_UPDATES = [
         effects: [
             {
                 action: {
-                    actionId: 'tubipProductionChange',
+                    target: 'tubipProduction',
+                    type: 'change',
                     actionOptions: {
                         amount: 2,
                     },

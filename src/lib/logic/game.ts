@@ -15,21 +15,25 @@ class GameEvents extends EventTarget {}
 export const gameEvents = new GameEvents()
 
 export type GameAction = {
-    actionId: GameActionId
+    type: GameActionType
+    target: GameActionTarget
     actionOptions?: Record<string, unknown>
 }
 
-type GameActionId = 'tubipProductionChange' | 'matterDerivationChange'
+export type GameActionTarget = 'tubipProduction' | 'matterDerivation'
+export type GameActionType = 'change'
 
 export type TubipProductionChangeGameAction = GameAction & {
-    actionId: 'tubipProductionChange'
+    actionId: 'change'
+    actionTarget: 'tubipProduction'
     actionOptions: {
         amount: number
     }
 }
 
 export type MatterDerivationChangeGameAction = GameAction & {
-    actionId: 'matterDerivationChange'
+    actionId: 'change'
+    actionTarget: 'matterDerivation'
     actionOptions: {
         amount: number
     }
@@ -165,11 +169,23 @@ export class Game {
         },
     }
 
-    private runAction = (action: GameAction) => {
-        if (action.actionId == 'tubipProductionChange') {
+    private runAction = (action: GameAction, logging: boolean = true) => {
+        let happeningDetails = {
+            actionTarget: action.target,
+            actionType: action.type,
+            tickstamp: this.currentState.ticksElapsed,
+        } as HappeningLog
+
+        if (action.type == 'change' && action.target == 'tubipProduction') {
             const actionInfo = action as TubipProductionChangeGameAction
             this.currentState.economy.production.perTick.tubip +=
                 actionInfo.actionOptions.amount
+
+            happeningDetails['factor'] = actionInfo.actionOptions.amount
+        }
+
+        if (logging == true) {
+            this.currentState.happeningLogs.push(happeningDetails)
         }
     }
 
