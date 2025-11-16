@@ -173,6 +173,12 @@ class Game {
         }
     }
 
+    private runEffects = (effects: Array<GameEffect>) => {
+        for (let effect of effects) {
+            this.runAction(effect.action)
+        }
+    }
+
     private eventListeners: Array<EventListenersItem> = []
 
     start = () => {
@@ -196,14 +202,7 @@ class Game {
                     /*
                         Runs this.currentState.effects on every tick
                     */
-
-                    const runGameEffects = (effects: Array<GameEffect>) => {
-                        for (let effect of effects) {
-                            this.runAction(effect.action)
-                        }
-                    }
-
-                    runGameEffects(this.currentState.effects.getApplicable())
+                    this.runEffects(this.currentState.effects.getApplicable())
                 },
             },
             {
