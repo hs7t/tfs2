@@ -76,7 +76,7 @@ export class NewsManager {
         return randomEntry
     }
 
-    recordUpdate = (update: NewsUpdate) => {
+    update = (update: NewsUpdate) => {
         this.updates.push(update)
         gameEvents.dispatchEvent(new NewsUpdateEvent(update))
     }

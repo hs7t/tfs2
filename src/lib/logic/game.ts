@@ -5,6 +5,7 @@ import {
 } from './happenings'
 import { fetchGame, saveGame } from './storage'
 import type { Milliseconds, Ticks, Tickstamp } from './time'
+import { tryChance } from './utilities'
 
 type Currency = number
 type Tubip = number
@@ -203,6 +204,18 @@ class Game {
                     }
 
                     runGameEffects(this.currentState.effects.getApplicable())
+                },
+            },
+            {
+                type: 'tick',
+                function: () => {
+                    const isLuckyTick = tryChance(30) == true
+
+                    if (isLuckyTick) {
+                        this.currentState.news.update(
+                            this.currentState.news.consumeRandom(),
+                        )
+                    }
                 },
             },
             {
