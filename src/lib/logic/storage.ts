@@ -1,4 +1,4 @@
-import type { GameType } from './game'
+import { Game, type GameType } from './game'
 
 const fetchObjectFromLocalStorage = (id: string) => {
     const fetchedJSON = localStorage.getItem(id)
@@ -16,9 +16,24 @@ const saveObjectToLocalStorage = (obj: object, id: string) => {
 
 export const saveGame = (game: GameType) => {
     saveObjectToLocalStorage(game, 'game')
-    localStorage.setItem('game', JSON.stringify(game))
 }
-
 export const fetchGame = () => {
-    return fetchObjectFromLocalStorage('game')
+    const oldGame = fetchObjectFromLocalStorage('game') as Game
+    const game = new Game()
+
+    game.currentState.wealth = oldGame.currentState.wealth
+    game.currentState.ticksElapsed = oldGame.currentState.ticksElapsed
+
+    for (const effect of oldGame.currentState.effects.modifiers) {
+        game.currentState.effects.register(effect)
+    }
+    for (const effect of oldGame.currentState.effects.schedules) {
+        game.currentState.effects.register(effect)
+    }
+
+    game.currentState.news.updates = oldGame.currentState.news.updates
+    game.currentState.news.availableNews =
+        oldGame.currentState.news.availableNews
+
+    return game
 }
