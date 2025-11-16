@@ -60,15 +60,18 @@ export class NewsManager {
 
     consumeRandom = () => {
         let currentIndex = Math.floor(Math.random() * this.availableNews.length)
+        let result = this.availableNews[0]
         let currentEntry = this.availableNews[currentIndex]
 
         if (currentEntry.repeatable == true) {
             if (currentEntry.repetitionsLeft == undefined) {
-                return currentEntry
+                result = currentEntry
             } else if (currentEntry.repetitionsLeft > 0) {
-                return currentEntry
+                result = currentEntry
             }
         }
+
+        return result
     }
 
     recordUpdate = (update: NewsUpdate) => {
