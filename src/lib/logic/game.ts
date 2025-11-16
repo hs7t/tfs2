@@ -116,12 +116,12 @@ class GameEffects {
     getApplicable = () => {
         let result = []
         for (let effect of this.getAll()) {
-            if (effect?.lingering == 0) {
+            if (effect.lingering !== undefined && effect.lingering <= 0) {
                 continue
             }
             if (
                 effect.cadence &&
-                effect.cadence % game.currentState.ticksElapsed != 0
+                game.currentState.ticksElapsed % effect.cadence != 0
             ) {
                 continue
             }
@@ -200,8 +200,10 @@ class Game {
                 type: 'tick',
                 function: () => {
                     /*
-                        Runs this.currentState.effects on every tick
+                        Resets the economy and runs applicable effects on every tick
                     */
+
+                    this.currentState.economy = new GameEconomy()
                     this.runEffects(this.currentState.effects.getApplicable())
                 },
             },
