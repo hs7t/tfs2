@@ -4,6 +4,7 @@
     import { onMount } from "svelte"
     import { fetchGame, type Game } from "./shared.svelte"
     import Fabrication from "$lib/elements/Fabrication.svelte"
+    import Market from "$lib/elements/Market.svelte"
     
     let game: Game
     let loadingState = true
@@ -30,6 +31,7 @@
                 <p><a href=".">How to play</a></p>
             </InfoBar>
             <Fabrication />
+            <Market />
         </section>
     {/if}
 </main>
