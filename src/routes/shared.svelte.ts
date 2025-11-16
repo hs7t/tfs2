@@ -1,6 +1,6 @@
 import { gameEvents } from '$lib/logic/game'
 import { fetchGame } from '$lib/logic/storage'
+import type { Game } from '$lib/logic/game'
 
-let game = fetchGame()
-
-export { game, gameEvents }
+export { fetchGame, gameEvents }
+export type { Game }
