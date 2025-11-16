@@ -58,20 +58,22 @@ export class NewsManager {
 
     readonly updates: Array<NewsUpdate> = []
 
-    consumeRandom = () => {
+    consumeRandom = (): ConsumableNewsUpdate => {
         let currentIndex = Math.floor(Math.random() * this.availableNews.length)
-        let result = this.availableNews[0]
-        let currentEntry = this.availableNews[currentIndex]
+        let randomEntry = this.availableNews[currentIndex]
 
-        if (currentEntry.repeatable == true) {
-            if (currentEntry.repetitionsLeft == undefined) {
-                result = currentEntry
-            } else if (currentEntry.repetitionsLeft > 0) {
-                result = currentEntry
-            }
+        const entryHasepetitionsLeft =
+            randomEntry.repetitionsLeft == undefined ||
+            randomEntry.repetitionsLeft > 0
+
+        if (!randomEntry.repeatable) {
+            return this.consumeRandom()
+        }
+        if (!entryHasepetitionsLeft) {
+            return this.consumeRandom()
         }
 
-        return result
+        return randomEntry
     }
 
     recordUpdate = (update: NewsUpdate) => {
