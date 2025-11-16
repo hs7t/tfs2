@@ -54,13 +54,12 @@
     .ticker {
         background-color: var(--t-color-accent-background-A);
         color: var(--t-color-accent-B);
-        font-family: var(--t-font-family-primary);
         padding: 0.2ch;
         border-radius: var(--t-radius-primary);
     }
 
     .ticker .scrolling {
-        animation: scroll infinite 1s linear;
+        animation: scroll infinite 2s linear;
         flex-shrink: 0;
         user-select: none;
         text-transform: uppercase;
