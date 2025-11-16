@@ -3,6 +3,7 @@
     import Status from "$lib/elements/Status.svelte"
     import { onMount } from "svelte"
     import { fetchGame, type Game } from "./shared.svelte"
+    import Fabrication from "$lib/elements/Fabrication.svelte"
     
     let game: Game
     let loadingState = true
@@ -28,6 +29,7 @@
                 <p><a href=".">About</a></p>
                 <p><a href=".">How to play</a></p>
             </InfoBar>
+            <Fabrication />
         </section>
     {/if}
 </main>
@@ -46,5 +48,8 @@
         flex-grow: 1;
         flex-basis: 50%;
         aspect-ratio: 1 / 1;
+
+        display: flex;
+        flex-direction: column;
     }
 </style>
