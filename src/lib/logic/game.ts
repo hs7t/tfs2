@@ -132,6 +132,9 @@ class GameEffects {
 
             result.push(effect)
         }
+
+        if (result.length == 0) return undefined
+
         return result
     }
 }
@@ -189,15 +192,20 @@ export class Game {
         }
     }
 
-    private runEffects = (effects: Array<GameEffect>) => {
-        for (let effect of effects) {
-            this.runAction(effect.action)
+    private runEffects = (effects: Array<GameEffect> | undefined) => {
+        if (effects != undefined) {
+            for (let effect of effects) {
+                this.runAction(effect.action)
+            }
         }
     }
 
     private eventListeners: Array<EventListenersItem> = []
 
     start = () => {
+        let currentEffects = this.currentState.effects.getApplicable()
+        this.runEffects(currentEffects)
+
         this.ticking.start()
 
         this.eventListeners.push(
