@@ -16,20 +16,20 @@ export const gameEvents = new GameEvents()
 
 export type GameAction = {
     actionId: GameActionId
-    actionOptions: object | undefined
+    actionOptions?: Record<string, unknown>
 }
 
-type GameActionId = 'tubipProductionIncrease' | 'matterDerivationDecrease'
+type GameActionId = 'tubipProductionChange' | 'matterDerivationChange'
 
 export type TubipProductionChangeGameAction = GameAction & {
-    actionId: 'tubipProductionIncrease'
+    actionId: 'tubipProductionChange'
     actionOptions: {
         amount: number
     }
 }
 
 export type MatterDerivationChangeGameAction = GameAction & {
-    actionId: 'matterDerivationDecrease'
+    actionId: 'matterDerivationChange'
     actionOptions: {
         amount: number
     }
@@ -166,7 +166,7 @@ class Game {
     }
 
     private runAction = (action: GameAction) => {
-        if (action.actionId == 'tubipProductionIncrease') {
+        if (action.actionId == 'tubipProductionChange') {
             const actionInfo = action as TubipProductionChangeGameAction
             this.currentState.economy.production.perTick.tubip +=
                 actionInfo.actionOptions.amount

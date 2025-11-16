@@ -40,7 +40,7 @@ export const GENERIC_CONSUMABLE_NEWS_UPDATES = [
         effects: [
             {
                 action: {
-                    actionId: 'tubipProductionIncrease',
+                    actionId: 'tubipProductionChange',
                     actionOptions: {
                         amount: 2,
                     },
