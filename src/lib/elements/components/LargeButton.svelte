@@ -14,5 +14,10 @@
 
         font-size: var(--t-font-size-large);
         font-family: var(--t-font-family-primary);
+
+        background-color: var(--t-color-accent-B);
+        border: 3pt solid var(--t-color-accent-C);
+
+        box-shadow: 0pt 3pt 0pt var(--t-color-accent-A);
     }
 </style>
