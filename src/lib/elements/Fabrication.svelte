@@ -10,8 +10,6 @@
             game.current?.generateTubip()
         }}>Fabricate</LargeButton
     >
-
-    {game.current?.currentState.wealth.tubip}
 </div>
 
 <style>

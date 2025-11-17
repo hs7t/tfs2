@@ -14,9 +14,5 @@ appEvents.addEventListener('mainMounted', () => {
     game.current = fetchGame()
 })
 
-setInterval(() => {
-    game.current = game.current
-}, 100)
-
 export { gameEvents, game, appEvents, MainMountedEvent }
 export type { Game }
