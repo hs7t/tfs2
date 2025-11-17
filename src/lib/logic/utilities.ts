@@ -8,12 +8,12 @@ export const tryChance = (percentageThreshold: number) => {
     else return false
 }
 
-const deviateNumberWithFactor = (num: number, factor: number) => {
+export const deviateNumberWithFactor = (num: number, factor: number) => {
     const deviation = (Math.random() * 2 - 1) * factor
 
     return num + deviation
 }
 
-const calculateConversion = (units: number, valuePerUnit: number) => {
+export const calculateConversion = (units: number, valuePerUnit: number) => {
     return units * valuePerUnit
 }

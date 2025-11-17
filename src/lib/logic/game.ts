@@ -5,7 +5,11 @@ import {
 } from './happenings'
 import { saveGame } from './storage'
 import type { Milliseconds, Ticks, Tickstamp } from './time'
-import { tryChance } from './utilities'
+import {
+    calculateConversion,
+    deviateNumberWithFactor,
+    tryChance,
+} from './utilities'
 
 type Currency = number
 type Tubip = number
@@ -193,9 +197,24 @@ export class Game {
         }
 
         if (action.type == 'generate' && action.target == 'tubip') {
-            const actionInfo = action as TubipGenerationGameAction
+            let info = action as TubipGenerationGameAction
+            const generationQuantity = info.actionOptions.amount
 
-            this.currentState.wealth.tubip += actionInfo.actionOptions.amount
+            const generationQuantityInMatter = calculateConversion(
+                generationQuantity as Tubip,
+                this.currentState.economy.rates.tubip.matter,
+            )
+
+            if (
+                this.currentState.wealth.matter - generationQuantityInMatter >=
+                0
+            ) {
+                this.currentState.wealth.tubip += deviateNumberWithFactor(
+                    generationQuantity,
+                    this.currentState.economy.controls.deviationFactor,
+                )
+                this.currentState.wealth.matter -= generationQuantity
+            }
         }
 
         if (logging == true) {
