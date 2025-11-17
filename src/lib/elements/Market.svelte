@@ -8,6 +8,10 @@
     <SegmentedButton
         options={[
             {
+                label: 'Sell',
+                action: () => {},
+            },
+            {
                 label: 'Shop',
                 action: () => {},
             },
