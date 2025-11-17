@@ -33,6 +33,8 @@ body {
     font-size: var(--t-font-size-primary);
 
     text-transform: uppercase;
+
+    background-color: var(--t-color-background);
 }
 
 button, input {
