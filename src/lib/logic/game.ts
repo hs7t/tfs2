@@ -177,20 +177,6 @@ export class Game {
         },
     }
 
-    private calculate = {
-        randomDeviation: (num: number) => {
-            const deviation =
-                (Math.random() * 2 - 1) *
-                this.currentState.economy.controls.deviationFactor
-
-            return num + deviation
-        },
-
-        conversion: (units: number, valuePerUnit: number) => {
-            return units * valuePerUnit
-        },
-    }
-
     private runAction = (action: GameAction, logging: boolean = true) => {
         let happeningDetails = {
             actionTarget: action.target,
