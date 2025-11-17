@@ -16,6 +16,8 @@
     onMount(() => {
         game = fetchGame()
         loadingState = false
+
+        game.start()
     })
 </script>
 
