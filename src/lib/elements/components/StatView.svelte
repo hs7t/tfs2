@@ -1,5 +1,12 @@
 <script lang="ts">
-    let { stats }: { stats: Array<StatViewStat> } = $props()
+    let {
+        stats,
+        statColours = [
+            'var(--t-color-accent-B)',
+            'var(--t-color-accent-C)',
+            'var(--t-color-accent-A)',
+        ],
+    }: { stats: Array<StatViewStat>; statColours?: Array<String> } = $props()
 
     export type StatViewStat = {
         label: string
@@ -30,19 +37,30 @@
 
 <div class="stat-view">
     <ul class="stat-group featured">
-        {#each separatedStats.featured as featuredStat}
+        {#each separatedStats.featured as featuredStat, index}
             <li class="stat">
-                {featuredStat.label}
-                {featuredStat.value}
+                <span>
+                    {featuredStat.label}
+                </span>
+                <span>
+                    {featuredStat.value}
+                </span>
             </li>
         {/each}
     </ul>
 
     <ul class="stat-group regular">
-        {#each separatedStats.regular as regularStat}
-            <li class="stat">
-                {regularStat.label}
-                {regularStat.value}
+        {#each separatedStats.regular as regularStat, index}
+            <li
+                class="stat"
+                style={`color: ${statColours[index % statColours.length]}`}
+            >
+                <span>
+                    {regularStat.label}
+                </span>
+                <span>
+                    {regularStat.value}
+                </span>
             </li>
         {/each}
     </ul>
@@ -64,6 +82,10 @@
     .stat {
         padding: 0.4ch;
         width: 100%;
-        background-color: red;
+        background-color: var(--t-color-accent-background-B);
+
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
     }
 </style>

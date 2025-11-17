@@ -6,7 +6,7 @@
     import Fabrication from "$lib/elements/Fabrication.svelte"
     import Market from "$lib/elements/Market.svelte"
     
-    let game: Game
+    export let game: Game
     let loadingState = true
 
     onMount(() => {
@@ -23,7 +23,7 @@
             <InfoBar>
                 <p>Tubip Fabrication Simulator</p>
             </InfoBar>
-            <Status />
+            <Status {game} />
         </section>
         <section>
             <InfoBar>
@@ -41,6 +41,8 @@
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
+
+        user-select: none;
     }
 
     section {

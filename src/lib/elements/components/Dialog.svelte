@@ -1,0 +1,124 @@
+<script lang="ts">
+    import CloseButton from './CloseButton.svelte'
+
+    let {
+        children,
+        title = 'Dialog',
+        shown = $bindable(),
+        dismissable = true,
+    } = $props()
+    let dialogReference: HTMLDialogElement
+
+    $effect(() => {
+        if (shown) {
+            dialogReference.showModal()
+        } else {
+            dialogReference.close()
+        }
+    })
+</script>
+
+<dialog
+    class="dialog"
+    bind:this={dialogReference}
+    onclose={() => (shown = false)}
+    closedby={dismissable ? 'any' : 'none'}
+>
+    <nav>
+        <h2>{title}</h2>
+        {#if dismissable}
+            <CloseButton
+                action={() => {
+                    shown = false
+                }}
+            />
+        {/if}
+    </nav>
+    {@render children()}
+</dialog>
+
+<style>
+    .dialog {
+        width: clamp(280px, 100%, 560px);
+        max-height: 80vh;
+        overflow-x: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+
+        color: var(--c-color-primary);
+        border: var(--c-border-generic);
+        background-color: var(--c-color-background-C);
+
+        animation: 100ms dialogEnter;
+        animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+        transition-behavior: allow-discrete;
+        transition: all 50ms;
+
+        align-self: center;
+        justify-self: center;
+    }
+
+    .dialog:focus {
+        outline: var(--c-border-attention);
+        outline-offset: 3pt;
+    }
+
+    @keyframes dialogEnter {
+        0% {
+            transform: scale(0.98);
+            opacity: 0.7;
+        }
+        100% {
+            transform: none;
+            opacity: 1;
+        }
+    }
+
+    .dialog::backdrop {
+        opacity: 0;
+    }
+
+    .dialog nav {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    :global(.dialog section) {
+        width: 100%;
+    }
+
+    :global(.dialog h2, .dialog h3, .dialog p, .dialog ol, .dialog li) {
+        font-size: inherit;
+        word-wrap: break-word;
+        max-width: 100%;
+    }
+
+    :global(.dialog h2, .dialog h3) {
+        text-transform: uppercase;
+        width: 100%;
+    }
+
+    :global(.dialog h2) {
+        text-align: center;
+    }
+
+    :global(.dialog .close-button) {
+        align-self: flex-end;
+        cursor: pointer;
+    }
+
+    :global(ol) {
+        max-width: 100%;
+        list-style-type: decimal;
+    }
+
+    .dialog:not([open]) {
+        display: none;
+        transition: all;
+    }
+</style>

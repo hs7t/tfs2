@@ -40,3 +40,7 @@ body {
 button, input {
     text-transform: inherit;
 }
+
+button {
+    user-select: none;
+}
