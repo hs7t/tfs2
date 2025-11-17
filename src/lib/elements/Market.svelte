@@ -1,6 +1,8 @@
 <script>
     import InfoBar from './components/InfoBar.svelte'
     import SegmentedButton from './components/SegmentedButton.svelte'
+
+    let { uiState = $bindable() } = $props()
 </script>
 
 <div class="market">
@@ -13,7 +15,9 @@
             },
             {
                 label: 'Shop',
-                action: () => {},
+                action: () => {
+                    uiState.purchaseDialogShown = true
+                },
             },
         ]}
     ></SegmentedButton>

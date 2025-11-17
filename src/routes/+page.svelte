@@ -1,12 +1,16 @@
 <script lang="ts">
-    import InfoBar from "$lib/elements/components/InfoBar.svelte"
-    import Status from "$lib/elements/Status.svelte"
-    import { onMount } from "svelte"
-    import { fetchGame, type Game } from "./shared.svelte"
-    import Fabrication from "$lib/elements/Fabrication.svelte"
-    import Market from "$lib/elements/Market.svelte"
-    
+    import InfoBar from '$lib/elements/components/InfoBar.svelte'
+    import Status from '$lib/elements/Status.svelte'
+    import { onMount } from 'svelte'
+    import { fetchGame, type Game } from './shared.svelte'
+    import Fabrication from '$lib/elements/Fabrication.svelte'
+    import Market from '$lib/elements/Market.svelte'
+    import PurchaseDialog from '$lib/elements/PurchaseDialog.svelte'
+
     export let game: Game
+    export let uiState = {
+        purchaseDialogShown: false,
+    }
     let loadingState = true
 
     onMount(() => {
@@ -31,8 +35,9 @@
                 <p><a href=".">How to play</a></p>
             </InfoBar>
             <Fabrication />
-            <Market />
+            <Market bind:uiState />
         </section>
+        <PurchaseDialog bind:shown={uiState.purchaseDialogShown} />
     {/if}
 </main>
 
