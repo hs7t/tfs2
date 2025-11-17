@@ -190,7 +190,7 @@ export class Game {
 
         if (action.type == 'change' && action.target == 'tubipProduction') {
             const actionInfo = action as TubipProductionChangeGameAction
-            this.currentState.economy.production.perTick.tubip +=
+            this.currentState.economy.production.perFabrication.tubip +=
                 actionInfo.actionOptions.amount
 
             happeningDetails['factor'] = actionInfo.actionOptions.amount
@@ -199,6 +199,8 @@ export class Game {
         if (action.type == 'generate' && action.target == 'tubip') {
             let info = action as TubipGenerationGameAction
             const generationQuantity = info.actionOptions.amount
+
+            if (generationQuantity == 0) return
 
             const generationQuantityInMatter = calculateConversion(
                 generationQuantity as Tubip,
@@ -213,7 +215,7 @@ export class Game {
                     generationQuantity,
                     this.currentState.economy.controls.deviationFactor,
                 )
-                this.currentState.wealth.matter -= generationQuantity
+                this.currentState.wealth.matter -= generationQuantityInMatter
                 console.log('generated')
             }
         }
@@ -277,6 +279,25 @@ export class Game {
                         this.currentState.news.update(
                             this.currentState.news.consumeRandom(),
                         )
+                    }
+                },
+            },
+            {
+                type: 'tick',
+                function: () => {
+                    const isLuckyTick = true == true
+
+                    if (isLuckyTick) {
+                        this.currentState.wealth.matter +=
+                            this.currentState.economy.production.perTick.matter
+                        this.runAction({
+                            target: 'tubip',
+                            type: 'generate',
+                            actionOptions: {
+                                amount: this.currentState.economy.production
+                                    .perTick.tubip,
+                            },
+                        })
                     }
                 },
             },
