@@ -29,31 +29,41 @@
 </script>
 
 <div class="stat-view">
-    <div class="featured-stats">
-        <ul>
-            {#each separatedStats.featured as featuredStat}
-                <li>
-                    {featuredStat.label}
-                    {featuredStat.value}
-                </li>
-            {/each}
-        </ul>
-    </div>
+    <ul class="stat-group featured">
+        {#each separatedStats.featured as featuredStat}
+            <li class="stat">
+                {featuredStat.label}
+                {featuredStat.value}
+            </li>
+        {/each}
+    </ul>
 
-    <div class="regular-stats">
-        <ul>
-            {#each separatedStats.regular as regularStat}
-                <li>
-                    {regularStat.label}
-                    {regularStat.value}
-                </li>
-            {/each}
-        </ul>
-    </div>
+    <ul class="stat-group regular">
+        {#each separatedStats.regular as regularStat}
+            <li class="stat">
+                {regularStat.label}
+                {regularStat.value}
+            </li>
+        {/each}
+    </ul>
 </div>
 
 <style>
     .stat-view {
         flex-grow: 1;
+        padding: 0.8ch;
+    }
+
+    .stat-group {
+        all: unset;
+        display: flex;
+        flex-direction: column;
+        gap: 0.2ch;
+    }
+
+    .stat {
+        padding: 0.4ch;
+        width: 100%;
+        background-color: red;
     }
 </style>
