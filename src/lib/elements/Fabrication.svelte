@@ -1,12 +1,17 @@
 <script lang="ts">
-    import type { Game } from '$lib/logic/game'
+    import type { Game } from '$lib/logic/game.svelte'
     import LargeButton from './components/LargeButton.svelte'
-
-    let { game = $bindable() as Game } = $props()
+    import { game } from '$lib/logic/shared.svelte'
 </script>
 
 <div class="fabrication">
-    <LargeButton action={() => {}}>Fabricate</LargeButton>
+    <LargeButton
+        action={() => {
+            game.current?.generateTubip()
+        }}>Fabricate</LargeButton
+    >
+
+    {game.current?.currentState.wealth.tubip}
 </div>
 
 <style>

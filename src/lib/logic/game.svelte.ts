@@ -3,7 +3,7 @@ import {
     type HappeningLog,
     type NewsUpdateEvent,
 } from './happenings'
-import { saveGame } from './storage'
+import { saveGame } from './storage.ts'
 import type { Milliseconds, Ticks, Tickstamp } from './time'
 import {
     calculateConversion,
@@ -149,7 +149,7 @@ class GameEffects {
 }
 
 export class Game {
-    currentState = {
+    currentState = $state({
         wealth: {
             currency: 0 as Currency,
             tubip: 0 as Tubip,
@@ -162,7 +162,7 @@ export class Game {
         news: new NewsManager(),
         happeningLogs: [] as Array<HappeningLog>,
         ticksElapsed: 0 as Ticks, // +1 on every tick
-    }
+    })
 
     private tickInterval?: ReturnType<typeof setInterval>
     private tickFrequency = 3000 as Milliseconds
@@ -214,6 +214,7 @@ export class Game {
                     this.currentState.economy.controls.deviationFactor,
                 )
                 this.currentState.wealth.matter -= generationQuantity
+                console.log('generated')
             }
         }
 
@@ -302,6 +303,16 @@ export class Game {
         }
 
         saveGame(this)
+    }
+
+    generateTubip = () => {
+        this.runAction({
+            type: 'generate',
+            target: 'tubip',
+            actionOptions: {
+                amount: 1,
+            },
+        })
     }
 }
 

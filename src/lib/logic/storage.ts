@@ -1,4 +1,4 @@
-import { Game, type GameType } from './game'
+import { Game, type GameType } from './game.svelte'
 
 const fetchObjectFromLocalStorage = (id: string) => {
     const fetchedJSON = localStorage.getItem(id)

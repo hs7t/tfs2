@@ -2,32 +2,33 @@
     import StatView from './components/StatView.svelte'
     import Ticker from './components/Ticker.svelte'
     import type { StatViewStat } from './components/StatView.svelte'
-    import type { Game } from '$lib/logic/game'
+    import type { Game } from '$lib/logic/game.svelte'
 
-    let { game }: { game: Game } = $props()
+    import { game } from '$lib/logic/shared.svelte'
+    let currentGame = $derived(game.current) as Game
 
     let statViewStats: Array<StatViewStat> = $derived.by(() => {
         return [
             {
                 label: 'Wealth',
-                value: String(game.currentState.wealth.currency) + ' CU',
+                value: String(currentGame.currentState.wealth.currency) + ' CU',
                 featured: false,
             },
             {
                 label: 'Matter',
-                value: String(game.currentState.wealth.matter) + ' MT',
+                value: String(currentGame.currentState.wealth.matter) + ' MT',
                 featured: false,
             },
             {
                 label: 'Tubip',
-                value: String(game.currentState.wealth.tubip) + ' TB',
+                value: String(currentGame.currentState.wealth.tubip) + ' TB',
                 featured: false,
             },
         ]
     })
 
     let currentHeadline: string = $derived.by(() => {
-        let gameNewsUpdates = game.currentState.news.updates
+        let gameNewsUpdates = currentGame.currentState.news.updates
         let currentNewsUpdate = gameNewsUpdates[gameNewsUpdates.length - 1]
 
         if (currentNewsUpdate == undefined) {
