@@ -21,6 +21,7 @@ export const fetchGame = () => {
     const oldGame = fetchObjectFromLocalStorage('game') as Game
     const game = new Game()
 
+    /*
     if (oldGame != undefined) {
         game.currentState.wealth = oldGame.currentState.wealth
         game.currentState.ticksElapsed = oldGame.currentState.ticksElapsed
@@ -36,5 +37,6 @@ export const fetchGame = () => {
         game.currentState.news.availableNews =
             oldGame.currentState.news.availableNews
     }
+    */
     return game
 }
