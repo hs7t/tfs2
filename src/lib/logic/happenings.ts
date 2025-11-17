@@ -5,7 +5,7 @@ import {
     type GameActionType,
     type GameEffect,
     type TubipProductionChangeGameAction,
-} from './game'
+} from './game.svelte'
 import type { Tickstamp } from './time'
 
 export type NewsUpdate = {

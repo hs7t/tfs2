@@ -3,9 +3,13 @@ import {
     type HappeningLog,
     type NewsUpdateEvent,
 } from './happenings'
-import { fetchGame, saveGame } from './storage'
+import { saveGame } from './storage.ts'
 import type { Milliseconds, Ticks, Tickstamp } from './time'
-import { tryChance } from './utilities'
+import {
+    calculateConversion,
+    deviateNumberWithFactor,
+    tryChance,
+} from './utilities'
 
 type Currency = number
 type Tubip = number
@@ -20,12 +24,20 @@ export type GameAction = {
     actionOptions?: Record<string, unknown>
 }
 
-export type GameActionTarget = 'tubipProduction' | 'matterDerivation'
-export type GameActionType = 'change'
+export type GameActionTarget = 'tubipProduction' | 'matterDerivation' | 'tubip'
+export type GameActionType = 'change' | 'generate'
 
 export type TubipProductionChangeGameAction = GameAction & {
     actionId: 'change'
     actionTarget: 'tubipProduction'
+    actionOptions: {
+        amount: number
+    }
+}
+
+export type TubipGenerationGameAction = GameAction & {
+    actionId: 'generate'
+    actionTarget: 'tubip'
     actionOptions: {
         amount: number
     }
@@ -137,7 +149,7 @@ class GameEffects {
 }
 
 export class Game {
-    currentState = {
+    currentState = $state({
         wealth: {
             currency: 0 as Currency,
             tubip: 0 as Tubip,
@@ -150,7 +162,7 @@ export class Game {
         news: new NewsManager(),
         happeningLogs: [] as Array<HappeningLog>,
         ticksElapsed: 0 as Ticks, // +1 on every tick
-    }
+    })
 
     private tickInterval?: ReturnType<typeof setInterval>
     private tickFrequency = 3000 as Milliseconds
@@ -178,10 +190,34 @@ export class Game {
 
         if (action.type == 'change' && action.target == 'tubipProduction') {
             const actionInfo = action as TubipProductionChangeGameAction
-            this.currentState.economy.production.perTick.tubip +=
+            this.currentState.economy.production.perFabrication.tubip +=
                 actionInfo.actionOptions.amount
 
             happeningDetails['factor'] = actionInfo.actionOptions.amount
+        }
+
+        if (action.type == 'generate' && action.target == 'tubip') {
+            let info = action as TubipGenerationGameAction
+            const generationQuantity = info.actionOptions.amount
+
+            if (generationQuantity == 0) return
+
+            const generationQuantityInMatter = calculateConversion(
+                generationQuantity as Tubip,
+                this.currentState.economy.rates.tubip.matter,
+            )
+
+            if (
+                this.currentState.wealth.matter - generationQuantityInMatter >=
+                0
+            ) {
+                this.currentState.wealth.tubip += deviateNumberWithFactor(
+                    generationQuantity,
+                    this.currentState.economy.controls.deviationFactor,
+                )
+                this.currentState.wealth.matter -= generationQuantityInMatter
+                console.log('generated')
+            }
         }
 
         if (logging == true) {
@@ -247,6 +283,25 @@ export class Game {
                 },
             },
             {
+                type: 'tick',
+                function: () => {
+                    const isLuckyTick = true == true
+
+                    if (isLuckyTick) {
+                        this.currentState.wealth.matter +=
+                            this.currentState.economy.production.perTick.matter
+                        this.runAction({
+                            target: 'tubip',
+                            type: 'generate',
+                            actionOptions: {
+                                amount: this.currentState.economy.production
+                                    .perTick.tubip,
+                            },
+                        })
+                    }
+                },
+            },
+            {
                 type: 'newsUpdate',
                 function: (e: NewsUpdateEvent) => {
                     for (const effect of e.newsUpdate.effects) {
@@ -269,6 +324,16 @@ export class Game {
         }
 
         saveGame(this)
+    }
+
+    generateTubip = () => {
+        this.runAction({
+            type: 'generate',
+            target: 'tubip',
+            actionOptions: {
+                amount: 1,
+            },
+        })
     }
 }
 
