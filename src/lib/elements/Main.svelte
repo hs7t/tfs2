@@ -1,8 +1,13 @@
 <script lang="ts">
     import InfoBar from '$lib/elements/components/InfoBar.svelte'
     import Status from '$lib/elements/Status.svelte'
-    import { onMount } from 'svelte'
-    import { appEvents, MainMountedEvent, game } from '$lib/logic/shared.svelte'
+    import { onDestroy, onMount } from 'svelte'
+    import {
+        appEvents,
+        MainMountedEvent,
+        MainUnmountedEvent,
+        game,
+    } from '$lib/logic/shared.svelte'
     import Fabrication from '$lib/elements/Fabrication.svelte'
     import Market from '$lib/elements/Market.svelte'
     import PurchaseDialog from '$lib/elements/PurchaseDialog.svelte'
@@ -15,6 +20,10 @@
     onMount(() => {
         appEvents.dispatchEvent(MainMountedEvent)
         loadingState = false
+    })
+
+    onDestroy(() => {
+        appEvents.dispatchEvent(MainUnmountedEvent)
     })
 </script>
 

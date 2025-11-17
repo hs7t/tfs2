@@ -9,10 +9,16 @@ let game = $state({
 class AppEvents extends EventTarget {}
 let appEvents = new AppEvents()
 let MainMountedEvent = new Event('mainMounted')
+let MainUnmountedEvent = new Event('mainUnmounted')
 
 appEvents.addEventListener('mainMounted', () => {
     game.current = fetchGame()
+    game.current.start()
 })
 
-export { gameEvents, game, appEvents, MainMountedEvent }
+appEvents.addEventListener('mainUnmounted', () => {
+    game.current?.stop()
+})
+
+export { gameEvents, game, appEvents, MainMountedEvent, MainUnmountedEvent }
 export type { Game }
