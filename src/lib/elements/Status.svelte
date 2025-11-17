@@ -2,7 +2,9 @@
     import StatView from './components/StatView.svelte'
     import Ticker from './components/Ticker.svelte'
     import type { StatViewStat } from './components/StatView.svelte';
-    import { game } from '$lib/logic/game'
+    import type { Game } from '$lib/logic/game'
+
+    let { game }: { game: Game } = $props()
 
     let statViewStats: Array<StatViewStat> = $derived.by(() => {
         return [

@@ -117,16 +117,13 @@ class GameEffects {
         return [...this.modifiers, ...this.schedules]
     }
 
-    getApplicable = () => {
+    getApplicable = (ticksElapsed: number) => {
         let result = []
         for (let effect of this.getAll()) {
             if (effect.lingering !== undefined && effect.lingering <= 0) {
                 continue
             }
-            if (
-                effect.cadence &&
-                game.currentState.ticksElapsed % effect.cadence != 0
-            ) {
+            if (effect.cadence && ticksElapsed % effect.cadence != 0) {
                 continue
             }
 
@@ -203,7 +200,9 @@ export class Game {
     private eventListeners: Array<EventListenersItem> = []
 
     start = () => {
-        let currentEffects = this.currentState.effects.getApplicable()
+        let currentEffects = this.currentState.effects.getApplicable(
+            this.currentState.ticksElapsed,
+        )
         this.runEffects(currentEffects)
 
         this.ticking.start()
@@ -228,7 +227,11 @@ export class Game {
                     */
 
                     this.currentState.economy = new GameEconomy()
-                    this.runEffects(this.currentState.effects.getApplicable())
+                    this.runEffects(
+                        this.currentState.effects.getApplicable(
+                            this.currentState.ticksElapsed,
+                        ),
+                    )
                 },
             },
             {
@@ -269,13 +272,6 @@ export class Game {
     }
 }
 
-const getGame = () => {
-    const saved = fetchGame()
-
-    if (saved == undefined) return new Game()
-    else return saved
-}
-
 export type GameType = InstanceType<typeof Game>
 
 export class TickEvent extends Event {
@@ -288,5 +284,3 @@ export class TickEvent extends Event {
         this.tickstamp = tickstamp
     }
 }
-
-export let game = getGame()
