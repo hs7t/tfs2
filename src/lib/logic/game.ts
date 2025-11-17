@@ -3,7 +3,7 @@ import {
     type HappeningLog,
     type NewsUpdateEvent,
 } from './happenings'
-import { fetchGame, saveGame } from './storage'
+import { saveGame } from './storage'
 import type { Milliseconds, Ticks, Tickstamp } from './time'
 import { tryChance } from './utilities'
 
@@ -20,12 +20,20 @@ export type GameAction = {
     actionOptions?: Record<string, unknown>
 }
 
-export type GameActionTarget = 'tubipProduction' | 'matterDerivation'
-export type GameActionType = 'change'
+export type GameActionTarget = 'tubipProduction' | 'matterDerivation' | 'tubip'
+export type GameActionType = 'change' | 'generate'
 
 export type TubipProductionChangeGameAction = GameAction & {
     actionId: 'change'
     actionTarget: 'tubipProduction'
+    actionOptions: {
+        amount: number
+    }
+}
+
+export type TubipGenerationGameAction = GameAction & {
+    actionId: 'generate'
+    actionTarget: 'tubip'
     actionOptions: {
         amount: number
     }
@@ -169,6 +177,20 @@ export class Game {
         },
     }
 
+    private calculate = {
+        randomDeviation: (num: number) => {
+            const deviation =
+                (Math.random() * 2 - 1) *
+                this.currentState.economy.controls.deviationFactor
+
+            return num + deviation
+        },
+
+        conversion: (units: number, valuePerUnit: number) => {
+            return units * valuePerUnit
+        },
+    }
+
     private runAction = (action: GameAction, logging: boolean = true) => {
         let happeningDetails = {
             actionTarget: action.target,
@@ -182,6 +204,12 @@ export class Game {
                 actionInfo.actionOptions.amount
 
             happeningDetails['factor'] = actionInfo.actionOptions.amount
+        }
+
+        if (action.type == 'generate' && action.target == 'tubip') {
+            const actionInfo = action as TubipGenerationGameAction
+
+            this.currentState.wealth.tubip += actionInfo.actionOptions.amount
         }
 
         if (logging == true) {
