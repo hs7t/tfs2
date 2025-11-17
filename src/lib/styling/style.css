@@ -1,0 +1,42 @@
+:root {
+    --t-color-primary: #000000;
+    --t-color-background: #fff5ed;
+
+    --t-color-accent-A: #ff80df; /* "Magenta" (in quotes) */
+    --t-color-accent-B: #ffe226; /* Yellow */
+    --t-color-accent-C: #5cb8ff; /* Cyan */
+
+    --t-color-accent-background-A: #4d4139; /* Dirt */
+    --t-color-accent-background-B: #394d3e; /* Chalkboard */
+
+    --t-border-primary: solid 1.4pt var(--t-color-primary);
+    --t-border-secondary: dashed 1.4pt var(--t-color-primary);
+
+    --t-font-family-primary: 'Red Hat Mono', monospace;
+
+    --t-font-size-primary: 1.1rem;
+    --t-font-size-large: clamp(1rem, 6vw, 2.5rem);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+
+    box-sizing: border-box;
+
+    -webkit-tap-highlight-color: transparent;
+    tap-highlight-color: transparent;
+}
+
+body {
+    font-family: var(--t-font-family-primary);
+    font-size: var(--t-font-size-primary);
+
+    text-transform: uppercase;
+
+    background-color: var(--t-color-background);
+}
+
+button, input {
+    text-transform: inherit;
+}

@@ -5,6 +5,7 @@
 			<text y=%22.9em%22 font-size=%2290%22>🏭</text>
 		</svg>
 	`
+	import '$lib/styling/style.css'
 
     let { children } = $props()
 </script>
