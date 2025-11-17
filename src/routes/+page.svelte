@@ -41,6 +41,8 @@
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
+
+        user-select: none;
     }
 
     section {
