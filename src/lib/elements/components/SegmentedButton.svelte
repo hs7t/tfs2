@@ -27,4 +27,21 @@
 
         flex-grow: 1;
     }
+
+    .segmented-button button {
+        background-color: var(--t-color-accent-B);
+        border: var(--t-border-primary);
+        border-right: none;
+        border-left: none;
+    }
+
+    .segmented-button button:first-child {
+        background-color: var(--t-color-accent-A);
+        border: var(--t-border-primary);
+        border-right: none;
+    }
+    .segmented-button button:last-child {
+        background-color: var(--t-color-accent-C);
+        border: var(--t-border-primary);
+    }
 </style>
