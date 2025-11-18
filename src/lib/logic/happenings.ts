@@ -97,6 +97,7 @@ export class NewsManager {
             return this.consumeRandom()
         }
 
+        randomEntry.repetitions += 1
         return randomEntry
     }
 
