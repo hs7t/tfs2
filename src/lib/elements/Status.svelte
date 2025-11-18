@@ -11,12 +11,17 @@
         return [
             {
                 label: 'Wealth',
-                value: String(currentGame.currentState.wealth.currency) + ' CU',
+                value:
+                    String(
+                        Math.floor(currentGame.currentState.wealth.currency),
+                    ) + ' CU',
                 featured: false,
             },
             {
                 label: 'Matter',
-                value: String(currentGame.currentState.wealth.matter) + ' MT',
+                value:
+                    String(Math.floor(currentGame.currentState.wealth.matter)) +
+                    ' MT',
                 featured: false,
             },
             {
