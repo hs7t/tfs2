@@ -11,9 +11,11 @@
     import Fabrication from '$lib/elements/Fabrication.svelte'
     import Market from '$lib/elements/Market.svelte'
     import PurchaseDialog from '$lib/elements/PurchaseDialog.svelte'
+    import SaleDialog from './SaleDialog.svelte'
 
     export let uiState = {
         purchaseDialogShown: false,
+        saleDialogShown: false,
     }
     let loadingState = true
 
@@ -46,6 +48,7 @@
             <Market bind:uiState />
         </section>
         <PurchaseDialog bind:shown={uiState.purchaseDialogShown} />
+        <SaleDialog bind:shown={uiState.saleDialogShown} />
     {/if}
 </main>
 

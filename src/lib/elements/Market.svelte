@@ -11,7 +11,9 @@
         options={[
             {
                 label: 'Sell',
-                action: () => {},
+                action: () => {
+                    uiState.saleDialogShown = true
+                },
             },
             {
                 label: 'Shop',
