@@ -5,8 +5,6 @@
     import Dialog from './components/Dialog.svelte'
     let { shown = $bindable(false) } = $props()
 
-    let shopItems = [] as Array<Item>
-
     const getAvailableItems = (currentGame: Game | undefined) => {
         let result: Array<Item> = []
 
@@ -21,9 +19,10 @@
                 return result
             }
 
-            if (item.id in getItemIds(currentGame.currentState.items)) {
+            if (item.id in getItemIds(currentGame.currentState.items)) continue
+
+            if (item.currencyCost > currentGame.currentState.wealth.currency)
                 continue
-            }
 
             result.push(item)
         }

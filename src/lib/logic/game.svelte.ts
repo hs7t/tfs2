@@ -340,6 +340,10 @@ export class Game {
     }
 
     purchase = (item: Item) => {
+        if (item.currencyCost > this.currentState.wealth.currency) return
+
+        this.currentState.wealth.currency -= item.currencyCost
+
         let consumableItem = {
             ...item,
             currentLevel: 0,
