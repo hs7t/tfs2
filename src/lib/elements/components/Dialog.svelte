@@ -47,9 +47,9 @@
         gap: 1rem;
         align-items: flex-start;
 
-        color: var(--c-color-primary);
-        border: var(--c-border-generic);
-        background-color: var(--c-color-background-C);
+        color: var(--t-color-primary);
+        border: var(--t-border-primary);
+        background-color: var(--t-color-background);
 
         animation: 100ms dialogEnter;
         animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
@@ -61,7 +61,7 @@
     }
 
     .dialog:focus {
-        outline: var(--c-border-attention);
+        outline: var(--t-border-secondary);
         outline-offset: 3pt;
     }
 

@@ -2,7 +2,8 @@ import {
     NewsManager,
     type HappeningLog,
     type NewsUpdateEvent,
-} from './happenings'
+} from './happenings.svelte.ts'
+import type { ConsumableItem, Item } from './purchases.ts'
 import { saveGame } from './storage.ts'
 import type { Milliseconds, Ticks, Tickstamp } from './time'
 import {
@@ -159,6 +160,8 @@ export class Game {
         economy: new GameEconomy(), // to be updated constantly and only by effects
         effects: new GameEffects(),
 
+        items: [] as Array<ConsumableItem>,
+
         news: new NewsManager(),
         happeningLogs: [] as Array<HappeningLog>,
         ticksElapsed: 0 as Ticks, // +1 on every tick
@@ -273,7 +276,7 @@ export class Game {
             {
                 type: 'tick',
                 function: () => {
-                    const isLuckyTick = tryChance(30) == true
+                    const isLuckyTick = tryChance(20) == true
 
                     if (isLuckyTick) {
                         this.currentState.news.update(
@@ -334,6 +337,43 @@ export class Game {
                 amount: 1,
             },
         })
+    }
+
+    sellTubip = (amount: Tubip) => {
+        if (this.currentState.wealth.tubip - amount < 0) return
+
+        const tubipAmountInCurrency = calculateConversion(
+            amount,
+            this.currentState.economy.rates.tubip.currency,
+        )
+
+        const deviatedAmount = deviateNumberWithFactor(
+            tubipAmountInCurrency,
+            this.currentState.economy.controls.deviationFactor,
+        )
+
+        this.currentState.wealth.currency += deviatedAmount
+
+        this.currentState.wealth.tubip -= amount
+    }
+
+    purchase = (item: Item) => {
+        if (item.currencyCost > this.currentState.wealth.currency) return
+
+        this.currentState.wealth.currency -= item.currencyCost
+
+        let consumableItem = {
+            ...item,
+            currentLevel: 0,
+        } as ConsumableItem
+
+        consumableItem.currentLevel += 1
+
+        for (let effect of item.effects) {
+            this.currentState.effects.register(effect)
+        }
+
+        this.currentState.items.push(consumableItem)
     }
 }
 
