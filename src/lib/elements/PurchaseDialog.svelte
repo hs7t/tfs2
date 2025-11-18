@@ -34,4 +34,13 @@
     const availableItems = $derived(getAvailableItems(game.current))
 </script>
 
-<Dialog title="Purchase" bind:shown>Hello, world!</Dialog>
+<Dialog title="Purchase" bind:shown>
+    {#each availableItems as item}
+        <li>
+            {item.name} ({item.currencyCost})
+            <button onclick={() => game.current?.purchase(item)}
+                >Purchase</button
+            >
+        </li>
+    {/each}
+</Dialog>
