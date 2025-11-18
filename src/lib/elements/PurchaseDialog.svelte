@@ -46,10 +46,12 @@
 </script>
 
 <Dialog title="Purchase" bind:shown>
-    {#if game.current}
+    <section class="item-list">
         {#each availableItems as item}
-            <li class={item.available ? 'available' : 'unavailable'}>
-                {item.name} ({item.currencyCost})
+            <li class={item.available ? 'available item' : 'unavailable item'}>
+                <h3 class="name">{item.name}</h3>
+                <p class="description">{item.description}</p>
+                <p class="price">Costs {item.currencyCost} CU.</p>
                 <button
                     onclick={() => game.current?.purchase(item)}
                     disabled={!item.available}
@@ -58,5 +60,54 @@
                 </button>
             </li>
         {/each}
-    {/if}
+    </section>
 </Dialog>
+
+<style>
+    .item-list {
+        all: unset;
+        display: flex;
+        flex-direction: column;
+
+        gap: 1ch;
+        padding: 1ch;
+        padding-top: 0;
+    }
+
+    .item-list .item {
+        all: unset;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        gap: 0.5ch;
+        padding: 1ch;
+        border: var(--t-border-primary);
+
+        background-color: var(--t-color-accent-B);
+    }
+
+    .item-list .item.unavailable {
+        background: repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 15px,
+            rgb(69, 69, 69) 15px,
+            rgb(69, 69, 69) 16.5px
+        );
+    }
+
+    .item-list .item h3,
+    .item-list .item p {
+        width: 100%;
+
+        font-size: var(--t-font-size-primary);
+    }
+
+    button {
+        padding: 0.8ch;
+        background-color: var(--t-color-accent-A);
+        border: var(--t-border-primary);
+        font-weight: 500;
+    }
+</style>
