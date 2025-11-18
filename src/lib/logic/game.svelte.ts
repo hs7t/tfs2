@@ -339,6 +339,22 @@ export class Game {
         })
     }
 
+    sellTubip = (amount: Tubip) => {
+        const tubipAmountInCurrency = calculateConversion(
+            amount,
+            this.currentState.economy.rates.tubip.currency,
+        )
+
+        const deviatedAmount = deviateNumberWithFactor(
+            tubipAmountInCurrency,
+            this.currentState.economy.controls.deviationFactor,
+        )
+
+        this.currentState.wealth.currency += deviatedAmount
+
+        this.currentState.wealth.tubip -= amount
+    }
+
     purchase = (item: Item) => {
         if (item.currencyCost > this.currentState.wealth.currency) return
 
