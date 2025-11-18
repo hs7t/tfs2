@@ -16,7 +16,7 @@
                 },
             },
             {
-                label: 'Shop',
+                label: 'Purchase',
                 action: () => {
                     uiState.purchaseDialogShown = true
                 },
