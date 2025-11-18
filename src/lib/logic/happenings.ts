@@ -11,6 +11,7 @@ import type { Tickstamp } from './time'
 export type NewsUpdate = {
     headline: string
     effects: Array<GameEffect>
+    maxRepetitions: number
     tickstamp?: Tickstamp | undefined
 }
 
@@ -33,15 +34,13 @@ export class NewsUpdateEvent extends Event {
 }
 
 type ConsumableNewsUpdate = NewsUpdate & {
-    repeatable: boolean
-    repetitionsLeft: number
+    repetitions: number
 }
 
-export const GENERIC_CONSUMABLE_NEWS_UPDATES = [
+export const GENERIC_NEWS_UPDATES: Array<NewsUpdate> = [
     {
         headline: "Acclaimed human's tubip mention sparks purchasing craze",
-        repeatable: true,
-        repetitionsLeft: 10,
+        maxRepetitions: 5,
         effects: [
             {
                 action: {
@@ -54,12 +53,28 @@ export const GENERIC_CONSUMABLE_NEWS_UPDATES = [
                 kind: 'modifier',
             },
         ],
-    } as ConsumableNewsUpdate,
-] as Array<ConsumableNewsUpdate>
+    } as NewsUpdate,
+]
+
+const newsUpdatesToConsumable = (
+    newsUpdates: NewsUpdate[],
+): ConsumableNewsUpdate[] => {
+    let result: ConsumableNewsUpdate[] = []
+
+    for (const update of newsUpdates) {
+        const consumableUpdate: ConsumableNewsUpdate = {
+            ...update,
+            repetitions: 0,
+        }
+        result.push(consumableUpdate)
+    }
+
+    return result
+}
 
 export class NewsManager {
     availableNews: Array<ConsumableNewsUpdate> = [
-        ...GENERIC_CONSUMABLE_NEWS_UPDATES,
+        ...newsUpdatesToConsumable(GENERIC_NEWS_UPDATES),
     ]
 
     updates: Array<NewsUpdate> = []
@@ -68,14 +83,17 @@ export class NewsManager {
         let currentIndex = Math.floor(Math.random() * this.availableNews.length)
         let randomEntry = this.availableNews[currentIndex]
 
-        const entryHasepetitionsLeft =
-            randomEntry.repetitionsLeft == undefined ||
-            randomEntry.repetitionsLeft > 0
+        let repetitionsLeft: boolean
 
-        if (!randomEntry.repeatable) {
-            return this.consumeRandom()
+        if (randomEntry.maxRepetitions == undefined) {
+            repetitionsLeft = true
+        } else if (randomEntry.maxRepetitions - randomEntry.repetitions <= 0) {
+            repetitionsLeft = false
+        } else {
+            repetitionsLeft = true
         }
-        if (!entryHasepetitionsLeft) {
+
+        if (!repetitionsLeft) {
             return this.consumeRandom()
         }
 
@@ -84,6 +102,7 @@ export class NewsManager {
 
     update = (update: NewsUpdate) => {
         this.updates.push(update)
+        console.info('Dispatched new update')
         gameEvents.dispatchEvent(new NewsUpdateEvent(update))
     }
 }
