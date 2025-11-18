@@ -3,6 +3,7 @@ import {
     type HappeningLog,
     type NewsUpdateEvent,
 } from './happenings'
+import type { ConsumableItem, Item } from './purchases.ts'
 import { saveGame } from './storage.ts'
 import type { Milliseconds, Ticks, Tickstamp } from './time'
 import {
@@ -158,6 +159,8 @@ export class Game {
 
         economy: new GameEconomy(), // to be updated constantly and only by effects
         effects: new GameEffects(),
+
+        items: [] as Array<ConsumableItem>,
 
         news: new NewsManager(),
         happeningLogs: [] as Array<HappeningLog>,
@@ -334,6 +337,17 @@ export class Game {
                 amount: 1,
             },
         })
+    }
+
+    purchase = (item: Item) => {
+        let consumableItem = {
+            ...item,
+            currentLevel: 0,
+        } as ConsumableItem
+
+        consumableItem.currentLevel += 1
+
+        this.currentState.items.push(consumableItem)
     }
 }
 
