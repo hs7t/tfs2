@@ -1,6 +1,4 @@
 <script lang="ts">
-    export const prerender = true
-
     let favicon = `
 		data:image/svg+xml,
 		<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22>
