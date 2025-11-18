@@ -276,7 +276,7 @@ export class Game {
             {
                 type: 'tick',
                 function: () => {
-                    const isLuckyTick = tryChance(30) == true
+                    const isLuckyTick = tryChance(20) == true
 
                     if (isLuckyTick) {
                         this.currentState.news.update(
