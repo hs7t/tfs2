@@ -21,7 +21,9 @@
             },
             {
                 label: 'Tubip',
-                value: String(currentGame.currentState.wealth.tubip) + ' TB',
+                value:
+                    String(Math.floor(currentGame.currentState.wealth.tubip)) +
+                    ' TB',
                 featured: false,
             },
         ]
