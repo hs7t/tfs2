@@ -340,6 +340,8 @@ export class Game {
     }
 
     sellTubip = (amount: Tubip) => {
+        if (this.currentState.wealth.tubip - amount < 0) return
+
         const tubipAmountInCurrency = calculateConversion(
             amount,
             this.currentState.economy.rates.tubip.currency,
