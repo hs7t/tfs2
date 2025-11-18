@@ -347,6 +347,10 @@ export class Game {
 
         consumableItem.currentLevel += 1
 
+        for (let effect of item.effects) {
+            this.currentState.effects.register(effect)
+        }
+
         this.currentState.items.push(consumableItem)
     }
 }
