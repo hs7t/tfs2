@@ -18,8 +18,9 @@ export type ConsumableItem = Item & {
 export const ITEMS: Array<Item> = [
     {
         id: 'dohlwropAutomator',
-        name: 'Dohlwrop Automator Machine',
-        description: 'Derives tubip from thin air.',
+        name: 'Dohlwrop Simple Automator Machine',
+        description:
+            'A contraption that triggers fabrications periodically. Wonderful!',
         currencyCost: 20,
         maxLevel: 4,
         effects: [
