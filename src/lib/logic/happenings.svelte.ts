@@ -77,33 +77,48 @@ export class NewsManager {
         ...newsUpdatesToConsumable(GENERIC_NEWS_UPDATES),
     ]
 
-    updates: Array<NewsUpdate> = []
+    updates: Array<NewsUpdate> = $state([])
 
-    consumeRandom = (): ConsumableNewsUpdate => {
+    consumeRandom = (): ConsumableNewsUpdate | undefined => {
+        if (this.availableNews.length == 0) return undefined
+
         let currentIndex = Math.floor(Math.random() * this.availableNews.length)
-        let randomEntry = this.availableNews[currentIndex]
+        let currentEntry = this.availableNews[currentIndex]
 
-        let repetitionsLeft: boolean
+        let result: ConsumableNewsUpdate
 
-        if (randomEntry.maxRepetitions == undefined) {
-            repetitionsLeft = true
-        } else if (randomEntry.maxRepetitions - randomEntry.repetitions <= 0) {
-            repetitionsLeft = false
-        } else {
-            repetitionsLeft = true
+        const hasRepetitions = (entry: typeof currentEntry | undefined) => {
+            if (entry == undefined) return false
+
+            if (entry.maxRepetitions == undefined) {
+                return true
+            } else if (
+                currentEntry.maxRepetitions - currentEntry.repetitions <=
+                0
+            ) {
+                return false
+            } else {
+                return true
+            }
         }
 
-        if (!repetitionsLeft) {
+        if (!hasRepetitions(currentEntry)) {
             return this.consumeRandom()
         }
 
-        randomEntry.repetitions += 1
-        return randomEntry
+        currentEntry.repetitions += 1
+        result = currentEntry
+
+        if (!hasRepetitions(currentEntry)) {
+            this.availableNews.splice(currentIndex)
+        }
+        return result
     }
 
-    update = (update: NewsUpdate) => {
-        this.updates.push(update)
-        console.info('Dispatched new update')
+    update = (update: NewsUpdate | undefined) => {
+        if (update == undefined) return
+
+        this.updates = [...this.updates, update]
         gameEvents.dispatchEvent(new NewsUpdateEvent(update))
     }
 }

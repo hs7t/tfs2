@@ -2,7 +2,7 @@ import {
     NewsManager,
     type HappeningLog,
     type NewsUpdateEvent,
-} from './happenings'
+} from './happenings.svelte.ts'
 import type { ConsumableItem, Item } from './purchases.ts'
 import { saveGame } from './storage.ts'
 import type { Milliseconds, Ticks, Tickstamp } from './time'
