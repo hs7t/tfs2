@@ -229,11 +229,34 @@ export class Game {
     }
 
     private runEffects = (effects: Array<GameEffect> | undefined) => {
+        let runningEffects: GameEffect[] = []
+
         if (effects != undefined) {
             for (let effect of effects) {
-                this.runAction(effect.action)
+                let runnable = true
+
+                if (
+                    effect.cadence &&
+                    !(this.currentState.ticksElapsed % effect.cadence == 0)
+                ) {
+                    runnable = false
+                }
+                if (effect.lingering && effect.lingering == 0) {
+                    runnable = false
+                }
+
+                if (effect.lingering) {
+                    effect.lingering -= 1
+                }
+
+                runningEffects.push(effect)
+                if (runnable) {
+                    this.runAction(effect.action, false)
+                }
             }
         }
+
+        return runningEffects
     }
 
     private eventListeners: Array<EventListenersItem> = []
@@ -293,14 +316,6 @@ export class Game {
                     if (isLuckyTick) {
                         this.currentState.wealth.matter +=
                             this.currentState.economy.production.perTick.matter
-                        this.runAction({
-                            target: 'tubip',
-                            type: 'generate',
-                            actionOptions: {
-                                amount: this.currentState.economy.production
-                                    .perTick.tubip,
-                            },
-                        })
                     }
                 },
             },
