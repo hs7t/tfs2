@@ -4,38 +4,30 @@
 
     let { headline }: { headline: string } = $props()
 
-    let windowWidth = $state(0)
+    let windowWidth = $state(1920)
 
     const pixelsPerCharacter = 24
-    let headlineEstimatedCharacters = $derived(
-        headline.length * pixelsPerCharacter,
-    )
 
-    let headlineRepetitions = $derived(
-        Math.floor(windowWidth / headlineEstimatedCharacters) * 10,
-    )
+    let headlineRepetitions = 12
 
-    onMount(() => {
+    $effect(() => {
         windowWidth = window.innerWidth
+    })
+
+    $effect(() => {
+        console.log('Headline update, ', headline)
     })
 </script>
 
-{#snippet content()}
-    <p>{headline}</p>
-{/snippet}
-
 <div class="ticker">
     {#each [...Array(headlineRepetitions).keys()] as scrolled}
-        {#key headline}
-            <span
-                class="scrolling"
-                id="scrolled-{scrolled}"
-                aria-hidden={!(scrolled == 1)}
-                transition:slide
-            >
-                {@render content()}
-            </span>
-        {/key}
+        <span
+            class="scrolling"
+            id="scrolled-{scrolled}"
+            aria-hidden={!(scrolled == 1)}
+        >
+            <p>{headline}</p>
+        </span>
     {/each}
 </div>
 

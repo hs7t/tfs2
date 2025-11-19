@@ -1,12 +1,25 @@
 <script>
+    import { gameEvents } from '$lib/logic/game.svelte'
+    import { game } from '$lib/logic/shared.svelte'
     import InfoBar from './components/InfoBar.svelte'
     import SegmentedButton from './components/SegmentedButton.svelte'
 
     let { uiState = $bindable() } = $props()
+
+    let currentNotification = $derived.by(() => {
+        let latestLog =
+            game.current?.currentState.happeningLogs[
+                game.current.currentState.happeningLogs.length - 1
+            ]
+        if (latestLog == undefined) return 'Now great time to fabricate.'
+
+        return `${latestLog.actionTarget} ${latestLog.actionType} ${latestLog.factor || ''} at T${latestLog.tickstamp}`
+    })
 </script>
 
 <div class="market">
-    <InfoBar>Something something Vicky something something Janet</InfoBar>
+    <InfoBar>{currentNotification}</InfoBar>
+
     <SegmentedButton
         options={[
             {

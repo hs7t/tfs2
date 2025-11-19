@@ -116,7 +116,9 @@ export class NewsManager {
     }
 
     update = (update: NewsUpdate | undefined) => {
-        if (update == undefined) return
+        if (update == undefined) {
+            return
+        }
 
         this.updates = [...this.updates, update]
         gameEvents.dispatchEvent(new NewsUpdateEvent(update))
