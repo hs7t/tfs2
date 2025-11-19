@@ -110,9 +110,9 @@ export const ITEMS: Array<Item> = [
     },
     {
         id: 'acquisition',
-        name: 'Simuladorean Times Company',
+        name: 'Simulatorean Times Company',
         description:
-            'A news conglomerate. Properties include The Simuladorean Times and the Concerned Citizen magazine.',
+            'A news conglomerate. Properties include The Simulatorean Times and the Concerned Citizen magazine.',
         currencyCost: 9910,
         maxLevel: 1,
         effects: [], // todo
