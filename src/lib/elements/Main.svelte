@@ -61,6 +61,7 @@
         align-items: center;
         justify-content: center;
     }
+
     main {
         display: flex;
         flex-direction: row;
@@ -68,6 +69,7 @@
         width: 80dvw;
         max-height: 80dvh;
         aspect-ratio: 2 / 1;
+        gap: 0.5ch;
         overflow: hidden;
     }
 
@@ -79,9 +81,13 @@
         flex-shrink: 1;
         flex-basis: 50%;
         aspect-ratio: 1 / 1;
+        padding: 0.5ch;
+        gap: 0.5ch;
 
         min-width: 0;
         overflow: auto;
+
+        border: var(--t-border-primary);
     }
 
     @media (max-width: 700pt) {

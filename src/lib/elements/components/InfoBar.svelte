@@ -23,5 +23,7 @@
 
         padding: 0.2ch;
         gap: 3ch;
+
+        border: var(--t-border-primary);
     }
 </style>

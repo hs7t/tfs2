@@ -24,3 +24,11 @@
         ]}
     ></SegmentedButton>
 </div>
+
+<style>
+    .market {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5ch;
+    }
+</style>
