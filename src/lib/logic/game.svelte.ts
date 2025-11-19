@@ -86,8 +86,8 @@ class GameEconomy {
     rates = {
         // in x, how many y?
         tubip: {
-            matter: 5,
-            currency: 2,
+            matter: 10,
+            currency: 1,
         } as Record<keyof any, Tubip>,
         currency: {
             tubip: 1 / 2,
