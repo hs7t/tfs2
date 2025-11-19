@@ -52,3 +52,18 @@
         <StatView stats={statViewStats} />
     </div>
 </section>
+
+<style>
+    section {
+        width: 100%;
+        height: 100%;
+
+        display: flex;
+        flex-direction: column;
+        gap: 0.5ch;
+    }
+
+    .stats {
+        border: var(--t-border-primary);
+    }
+</style>

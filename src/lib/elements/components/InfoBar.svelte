@@ -9,6 +9,7 @@
 <style>
     .info-bar {
         width: 100%;
+        height: auto;
 
         display: flex;
         flex-direction: row;
@@ -18,8 +19,11 @@
         justify-content: space-evenly;
 
         overflow-x: auto;
+        overflow-y: hidden;
 
         padding: 0.2ch;
         gap: 3ch;
+
+        border: var(--t-border-primary);
     }
 </style>

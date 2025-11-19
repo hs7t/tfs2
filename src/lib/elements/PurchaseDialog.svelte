@@ -23,7 +23,7 @@
         }
 
         for (let item of ITEMS) {
-            let itemAvailable: boolean = false
+            let itemAvailable: boolean = true
 
             if (item.id in getItemIds(currentGame.currentState.items)) {
                 itemAvailable = false
