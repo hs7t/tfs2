@@ -41,8 +41,17 @@
         </section>
         <section>
             <InfoBar>
-                <p><a href=".">About</a></p>
-                <p><a href=".">How to play</a></p>
+                <p>
+                    <a
+                        href="https://github.com/hs7t/tfs2#tubip-fabrication-simulator-nt"
+                        >About</a
+                    >
+                </p>
+                <p>
+                    <a href="https://github.com/hs7t/tfs2#playing"
+                        >How to play</a
+                    >
+                </p>
             </InfoBar>
             <Fabrication />
             <Market bind:uiState />
