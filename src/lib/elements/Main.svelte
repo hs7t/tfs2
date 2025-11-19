@@ -53,23 +53,52 @@
 </main>
 
 <style>
+    :global(body) {
+        width: 100dvw;
+        height: 100dvh;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
     main {
         display: flex;
         flex-direction: row;
-        flex-wrap: wrap;
-
         user-select: none;
+        width: 80dvw;
+        max-height: 80dvh;
+        aspect-ratio: 2 / 1;
+        overflow: hidden;
     }
 
     section {
-        max-height: 100dvw;
-        max-width: 100dvh;
+        display: flex;
+        flex-direction: column;
 
         flex-grow: 1;
+        flex-shrink: 1;
         flex-basis: 50%;
         aspect-ratio: 1 / 1;
 
-        display: flex;
-        flex-direction: column;
+        min-width: 0;
+        overflow: auto;
+    }
+
+    @media (max-width: 700pt) {
+        main {
+            flex-direction: column;
+
+            max-width: 100dvw;
+            max-height: 100dvh;
+            aspect-ratio: 1 / 2;
+        }
+
+        section {
+            min-height: 50dvh;
+        }
+
+        section.information {
+            max-width: none;
+        }
     }
 </style>
