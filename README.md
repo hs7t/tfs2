@@ -1,7 +1,8 @@
 # Tubip Fabrication Simulator N.T.
 
-Tubip Fabrication Simulator is a tiny browser game about fabricating and
-selling 'tubip', a make-believe commodity.
+Tubip Fabrication Simulator (New Technology)
+is a tiny browser game about fabricating and selling 'tubip',
+a make-believe commodity.
 
 ## Playing
 
