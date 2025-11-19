@@ -35,16 +35,17 @@ a make-believe commodity.
     ```
 2.  Run a development server:
 
-    ```
+    ```bash
     $ npm run dev
     ```
 
 3.  Get a build when you're ready:
-    ```
+    ```bash
     npm run build   # check out ./dist afterward!
     ```
 
-There's a GitHub Pages workflow available at [`.github/workflows`](./.github/pages)
+There's a GitHub Pages workflow available at [`.github/workflows`](./.github/pages).
+No back-end is necessary - the distribution build is fully static.
 
 ## About
 
