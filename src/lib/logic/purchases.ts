@@ -3,6 +3,8 @@ import type {
     MatterDerivationChangeGameAction,
     TubipGenerationGameAction,
 } from './game.svelte'
+import type { NewsUpdate } from './happenings.svelte'
+import type { Percentage } from './utilities'
 
 export type ItemId = string
 
@@ -13,6 +15,8 @@ export type Item = {
     currencyCost: number
     maxLevel: number
     effects: Array<GameEffect>
+    likelihood?: Percentage
+    newsUpdate?: NewsUpdate
 }
 
 export type ConsumableItem = Item & {
@@ -64,8 +68,8 @@ export const ITEMS: Array<Item> = [
         name: 'TQ-1000 Enhanced Refining Module',
         description:
             'Extracts the B-particles in matter, improving fabrication efficiency. Is limited in the amount of matter it can handle.',
-        currencyCost: 200,
-        maxLevel: 2,
+        currencyCost: 210,
+        maxLevel: 1,
         effects: [
             {
                 kind: 'modifier',
@@ -78,15 +82,26 @@ export const ITEMS: Array<Item> = [
                 } as MatterDerivationChangeGameAction,
             },
         ],
+        newsUpdate: {
+            headline:
+                'Small corporation pioneers use of quantum tubip mechanics in fabrication',
+            effects: [],
+            maxRepetitions: 1,
+        },
     },
     {
         id: 'bribe',
         name: 'Lobbying',
         description:
             'Gift an important person a beach vacation package. All-included!',
-        currencyCost: 240,
+        currencyCost: 540,
         maxLevel: 1,
         effects: [], // todo
+        newsUpdate: {
+            headline: 'Senator pushes bill deregulating fabrication industry',
+            effects: [],
+            maxRepetitions: 1,
+        },
     },
     {
         id: 'sattelite',
@@ -107,6 +122,12 @@ export const ITEMS: Array<Item> = [
                 } as MatterDerivationChangeGameAction,
             },
         ],
+        newsUpdate: {
+            headline:
+                'Possible effects of ozone layer degradation concerning scientists',
+            effects: [],
+            maxRepetitions: 1,
+        },
     },
     {
         id: 'acquisition',
@@ -116,6 +137,12 @@ export const ITEMS: Array<Item> = [
         currencyCost: 9910,
         maxLevel: 1,
         effects: [], // todo
+        newsUpdate: {
+            headline:
+                "'We remain committed to our standard of fearless, independent journalism', remarks S.M.T.C. C.E.O. at ceremony naming tubip 'Investment of the year'",
+            effects: [],
+            maxRepetitions: 1,
+        },
     },
     {
         id: 'space',
@@ -124,5 +151,10 @@ export const ITEMS: Array<Item> = [
         currencyCost: 11320,
         maxLevel: 1000,
         effects: [], // yeah, does nothing
+        newsUpdate: {
+            headline: 'Wealthy people spotted in space',
+            effects: [],
+            maxRepetitions: 1,
+        },
     },
 ]
