@@ -223,6 +223,12 @@ export class Game {
             }
         }
 
+        if (action.type == 'change' && action.target == 'matterDerivation') {
+            let info = action as MatterDerivationChangeGameAction
+            this.currentState.economy.production.perTick.matter +=
+                info.actionOptions.amount
+        }
+
         if (logging == true) {
             this.currentState.happeningLogs.push(happeningDetails)
         }
