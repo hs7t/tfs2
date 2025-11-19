@@ -8,6 +8,7 @@
 
 <style>
     button {
+        user-select: none !important;
         all: unset;
         font-size: inherit;
         padding: 0.5ch;
