@@ -1,4 +1,6 @@
-export const tryChance = (percentageThreshold: number) => {
+export type Percentage = number
+
+export const tryChance = (percentageThreshold: Percentage) => {
     if (percentageThreshold > 100) percentageThreshold = 100
     if (percentageThreshold < 0) percentageThreshold = 0
 

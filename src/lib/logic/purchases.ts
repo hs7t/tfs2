@@ -1,4 +1,11 @@
-import type { GameEffect, TubipGenerationGameAction } from './game.svelte'
+import type {
+    GameEffect,
+    MatterDerivationChangeGameAction,
+    TubipGenerationGameAction,
+    TubipProductionChangeGameAction,
+} from './game.svelte'
+import type { NewsUpdate } from './happenings.svelte'
+import type { Percentage } from './utilities'
 
 export type ItemId = string
 
@@ -9,6 +16,8 @@ export type Item = {
     currencyCost: number
     maxLevel: number
     effects: Array<GameEffect>
+    likelihood?: Percentage
+    newsUpdate?: NewsUpdate
 }
 
 export type ConsumableItem = Item & {
@@ -35,5 +44,130 @@ export const ITEMS: Array<Item> = [
                 } as TubipGenerationGameAction,
             },
         ],
+    },
+    {
+        id: 'alien',
+        name: 'Tiny Green Creature',
+        description: 'Definitely not an alien. Loves operating machinery.',
+        currencyCost: 80,
+        maxLevel: 10,
+        effects: [
+            {
+                kind: 'schedule',
+                action: {
+                    type: 'generate',
+                    target: 'tubip',
+                    actionOptions: {
+                        amount: 3,
+                    },
+                } as TubipGenerationGameAction,
+            },
+        ],
+    },
+    {
+        id: 'refiner',
+        name: 'TQ-1000 Enhanced Refining Module',
+        description:
+            'Extracts the B-particles in matter, improving fabrication efficiency. Is limited in the amount of matter it can handle.',
+        currencyCost: 210,
+        maxLevel: 1,
+        effects: [
+            {
+                kind: 'modifier',
+                action: {
+                    actionId: 'change',
+                    actionTarget: 'matterDerivation',
+                    actionOptions: {
+                        amount: 4,
+                    },
+                } as MatterDerivationChangeGameAction,
+            },
+        ],
+        newsUpdate: {
+            headline:
+                'Small corporation pioneers use of quantum tubip mechanics in fabrication',
+            effects: [],
+            maxRepetitions: 1,
+        },
+    },
+    {
+        id: 'bribe',
+        name: 'Lobbying',
+        description:
+            'Gift an important person a beach vacation package. All-included!',
+        currencyCost: 540,
+        likelihood: 70,
+        maxLevel: 1,
+        effects: [
+            {
+                action: {
+                    type: 'change',
+                    target: 'tubipProduction',
+                    actionOptions: {
+                        amount: 10,
+                    },
+                } as TubipProductionChangeGameAction,
+                kind: 'modifier',
+            },
+        ],
+        newsUpdate: {
+            headline: 'Senator pushes bill deregulating fabrication industry',
+            effects: [],
+            maxRepetitions: 1,
+        },
+    },
+    {
+        id: 'sattelite',
+        name: 'International Matter Increase Operation',
+        description:
+            "Fund the beaming of powerful rays that wear out the Earth's ozone layer in order to allow more tubip matter to enter.",
+        currencyCost: 2120,
+        maxLevel: 1,
+        effects: [
+            {
+                kind: 'modifier',
+                action: {
+                    actionId: 'change',
+                    actionTarget: 'matterDerivation',
+                    actionOptions: {
+                        amount: 20,
+                    },
+                } as MatterDerivationChangeGameAction,
+            },
+        ],
+        newsUpdate: {
+            headline:
+                'Possible effects of ozone layer degradation concerning scientists',
+            effects: [],
+            maxRepetitions: 1,
+        },
+    },
+    {
+        id: 'acquisition',
+        name: 'Simulatorean Times Company',
+        description:
+            'A news conglomerate. Properties include The Simulatorean Times and the Concerned Citizen magazine.',
+        currencyCost: 9910,
+        maxLevel: 1,
+        effects: [], // todo
+        newsUpdate: {
+            headline:
+                "'We remain committed to our standard of fearless, independent journalism', remarks S.M.T.C. C.E.O. at ceremony naming tubip 'Investment of the year'",
+            effects: [],
+            maxRepetitions: 1,
+        },
+    },
+    {
+        id: 'space',
+        name: 'Space mission',
+        description: 'Take yourself to space. Of no use, really, but fun.',
+        currencyCost: 11320,
+        maxLevel: 1000,
+        effects: [], // yeah, does nothing
+        newsUpdate: {
+            headline: 'Wealthy people spotted in space',
+            effects: [],
+            maxRepetitions: 1,
+        },
     },
 ]

@@ -51,7 +51,7 @@
     }
 
     .ticker .scrolling {
-        animation: scroll infinite 2s linear;
+        animation: scroll infinite 4s linear;
         flex-shrink: 0;
         user-select: none;
         text-transform: uppercase;

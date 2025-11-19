@@ -86,8 +86,8 @@ class GameEconomy {
     rates = {
         // in x, how many y?
         tubip: {
-            matter: 5,
-            currency: 2,
+            matter: 10,
+            currency: 1,
         } as Record<keyof any, Tubip>,
         currency: {
             tubip: 1 / 2,
@@ -223,6 +223,12 @@ export class Game {
             }
         }
 
+        if (action.type == 'change' && action.target == 'matterDerivation') {
+            let info = action as MatterDerivationChangeGameAction
+            this.currentState.economy.production.perTick.matter +=
+                info.actionOptions.amount
+        }
+
         if (logging == true) {
             this.currentState.happeningLogs.push(happeningDetails)
         }
@@ -300,8 +306,10 @@ export class Game {
                 type: 'tick',
                 function: () => {
                     const isLuckyTick = tryChance(20) == true
+                    const isProperTick =
+                        this.currentState.ticksElapsed % 23 == 0
 
-                    if (isLuckyTick) {
+                    if (isLuckyTick && isProperTick) {
                         this.currentState.news.update(
                             this.currentState.news.consumeRandom(),
                         )
@@ -384,11 +392,23 @@ export class Game {
 
         consumableItem.currentLevel += 1
 
-        for (let effect of item.effects) {
-            this.currentState.effects.register(effect)
+        let effectsRunning = true
+
+        if (item.likelihood) {
+            effectsRunning = tryChance(item.likelihood)
+        }
+
+        if (effectsRunning) {
+            for (let effect of item.effects) {
+                this.currentState.effects.register(effect)
+            }
         }
 
         this.currentState.items.push(consumableItem)
+
+        if (item.newsUpdate) {
+            this.currentState.news.update(item.newsUpdate)
+        }
     }
 }
 
