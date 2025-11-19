@@ -306,8 +306,10 @@ export class Game {
                 type: 'tick',
                 function: () => {
                     const isLuckyTick = tryChance(20) == true
+                    const isProperTick =
+                        this.currentState.ticksElapsed % 23 == 0
 
-                    if (isLuckyTick) {
+                    if (isLuckyTick && isProperTick) {
                         this.currentState.news.update(
                             this.currentState.news.consumeRandom(),
                         )
