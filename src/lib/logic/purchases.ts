@@ -1,4 +1,8 @@
-import type { GameEffect, TubipGenerationGameAction } from './game.svelte'
+import type {
+    GameEffect,
+    MatterDerivationChangeGameAction,
+    TubipGenerationGameAction,
+} from './game.svelte'
 
 export type ItemId = string
 
@@ -53,7 +57,7 @@ export const ITEMS: Array<Item> = [
                     },
                 } as TubipGenerationGameAction,
             },
-        ], // todo
+        ],
     },
     {
         id: 'refiner',
@@ -62,7 +66,18 @@ export const ITEMS: Array<Item> = [
             'Extracts the B-particles in matter, improving fabrication efficiency. Is limited in the amount of matter it can handle.',
         currencyCost: 200,
         maxLevel: 2,
-        effects: [], // todo
+        effects: [
+            {
+                kind: 'modifier',
+                action: {
+                    actionId: 'change',
+                    actionTarget: 'matterDerivation',
+                    actionOptions: {
+                        amount: 4,
+                    },
+                } as MatterDerivationChangeGameAction,
+            },
+        ],
     },
     {
         id: 'bribe',
@@ -78,9 +93,20 @@ export const ITEMS: Array<Item> = [
         name: 'International Matter Increase Operation',
         description:
             "Fund the beaming of powerful rays that wear out the Earth's ozone layer in order to allow more tubip matter to enter.",
-        currencyCost: 2100,
+        currencyCost: 2120,
         maxLevel: 1,
-        effects: [], // todo
+        effects: [
+            {
+                kind: 'modifier',
+                action: {
+                    actionId: 'change',
+                    actionTarget: 'matterDerivation',
+                    actionOptions: {
+                        amount: 20,
+                    },
+                } as MatterDerivationChangeGameAction,
+            },
+        ],
     },
     {
         id: 'acquisition',
