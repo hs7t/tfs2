@@ -390,11 +390,23 @@ export class Game {
 
         consumableItem.currentLevel += 1
 
-        for (let effect of item.effects) {
-            this.currentState.effects.register(effect)
+        let effectsRunning = true
+
+        if (item.likelihood) {
+            effectsRunning = tryChance(item.likelihood)
+        }
+
+        if (effectsRunning) {
+            for (let effect of item.effects) {
+                this.currentState.effects.register(effect)
+            }
         }
 
         this.currentState.items.push(consumableItem)
+
+        if (item.newsUpdate) {
+            this.currentState.news.update(item.newsUpdate)
+        }
     }
 }
 
