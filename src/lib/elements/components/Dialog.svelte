@@ -34,7 +34,9 @@
             />
         {/if}
     </nav>
-    {@render children()}
+    <div class="content">
+        {@render children()}
+    </div>
 </dialog>
 
 <style>
@@ -86,6 +88,11 @@
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
+    }
+
+    dialog .content {
+        flex-grow: 1;
+        overflow-y: auto;
     }
 
     :global(.dialog section) {
