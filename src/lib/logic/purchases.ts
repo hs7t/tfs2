@@ -42,14 +42,25 @@ export const ITEMS: Array<Item> = [
         description: 'Definitely not an alien. Loves operating machinery.',
         currencyCost: 80,
         maxLevel: 10,
-        effects: [], // todo
+        effects: [
+            {
+                kind: 'schedule',
+                action: {
+                    type: 'generate',
+                    target: 'tubip',
+                    actionOptions: {
+                        amount: 3,
+                    },
+                } as TubipGenerationGameAction,
+            },
+        ], // todo
     },
     {
         id: 'refiner',
         name: 'TQ-1000 Enhanced Refining Module',
         description:
             'Extracts the B-particles in matter, improving fabrication efficiency. Is limited in the amount of matter it can handle.',
-        currencyCost: 100,
+        currencyCost: 200,
         maxLevel: 2,
         effects: [], // todo
     },
