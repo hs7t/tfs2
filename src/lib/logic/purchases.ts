@@ -2,6 +2,7 @@ import type {
     GameEffect,
     MatterDerivationChangeGameAction,
     TubipGenerationGameAction,
+    TubipProductionChangeGameAction,
 } from './game.svelte'
 import type { NewsUpdate } from './happenings.svelte'
 import type { Percentage } from './utilities'
@@ -95,8 +96,20 @@ export const ITEMS: Array<Item> = [
         description:
             'Gift an important person a beach vacation package. All-included!',
         currencyCost: 540,
+        likelihood: 70,
         maxLevel: 1,
-        effects: [], // todo
+        effects: [
+            {
+                action: {
+                    type: 'change',
+                    target: 'tubipProduction',
+                    actionOptions: {
+                        amount: 10,
+                    },
+                } as TubipProductionChangeGameAction,
+                kind: 'modifier',
+            },
+        ],
         newsUpdate: {
             headline: 'Senator pushes bill deregulating fabrication industry',
             effects: [],
