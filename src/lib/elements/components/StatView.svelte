@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { slide } from 'svelte/transition'
+
     let {
         stats,
         statColours = [
@@ -42,9 +44,11 @@
                 <span>
                     {featuredStat.label}
                 </span>
-                <span>
-                    {featuredStat.value}
-                </span>
+                {#key featuredStat}
+                    <span transition:slide={{ duration: 100 }}>
+                        {featuredStat.value}
+                    </span>
+                {/key}
             </li>
         {/each}
     </ul>
@@ -59,7 +63,11 @@
                     {regularStat.label}
                 </span>
                 <span>
-                    {regularStat.value}
+                    {#key regularStat.value}
+                        <span transition:slide={{ duration: 200 }}>
+                            {regularStat.value}
+                        </span>
+                    {/key}
                 </span>
             </li>
         {/each}
@@ -87,5 +95,10 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+    }
+
+    .stat span {
+        display: flex;
+        flex-direction: column;
     }
 </style>
