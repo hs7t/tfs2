@@ -11,7 +11,7 @@
             game.current?.currentState.happeningLogs[
                 game.current.currentState.happeningLogs.length - 1
             ]
-        if (latestLog == undefined) return 'Now great time to fabricate.'
+        if (latestLog == undefined) return 'Updates will appear here'
 
         return `${latestLog.actionTarget} ${latestLog.actionType} ${latestLog.factor || ''} at T${latestLog.tickstamp}`
     })
